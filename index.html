@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Peso Saludable · App Interactiva Offline</title>
+<style>
+@property --angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e17;color:#e8ecf4;min-height:100vh;overflow-x:hidden}
+.ambient{position:fixed;inset:-20vmax;z-index:-2;filter:blur(var(--blur,56px));opacity:var(--int,0.65);transition:opacity .5s}
+.blob{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(40px);opacity:.8;mix-blend-mode:screen}
+#b1{background:#4285F4;top:-10vmax;left:-10vmax;animation:m1 18s ease-in-out infinite alternate}
+#b2{background:#EA4335;bottom:-15vmax;right:-10vmax;animation:m2 22s ease-in-out infinite alternate}
+#b3{background:#FBBC05;top:30%;left:55%;width:35vmax;height:35vmax;animation:m1 26s ease-in-out infinite alternate-reverse}
+#b4{background:#34A853;top:60%;left:5%;width:30vmax;height:30vmax;animation:m2 20s ease-in-out infinite alternate-reverse}
+@keyframes m1{to{transform:translate(8vmax,6vmax) scale(1.2)}}
+@keyframes m2{to{transform:translate(-7vmax,-8vmax) scale(1.15)}}
+.wrap{max-width:980px;margin:0 auto;padding:20px 16px 60px}
+header{text-align:center;padding:18px 0}
+.gemini-star{display:inline-block;font-size:42px;background:conic-gradient(from var(--angle),#4285F4,#EA4335,#FBBC05,#34A853,#4285F4);-webkit-background-clip:text;background-clip:text;color:transparent;animation:spin 6s linear infinite}
+@keyframes spin{to{--angle:360deg}}
+h1{margin:.2em 0;font-size:1.7rem}
+.sub{color:#aab4c7;font-size:.95rem}
+.card{position:relative;background:rgba(17,22,36,.88);border-radius:18px;padding:18px;margin:16px 0;isolation:isolate}
+.card::before{content:"";position:absolute;inset:-2px;border-radius:20px;z-index:-1;background:conic-gradient(from var(--angle),#4285F4,#9b72cb,#EA4335,#FBBC05,#34A853,#4285F4);animation:spin 8s linear infinite;filter:blur(1px);opacity:.9}
+.card::after{content:"";position:absolute;inset:0;border-radius:18px;background:#111624;z-index:-1}
+.card.think::before{filter:blur(14px);opacity:.7;animation:spin 2.2s linear infinite}
+.grid{display:grid;gap:12px}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr 1fr}}
+label{font-size:.85rem;color:#aab4c7}input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3350;background:#0e1322;color:#fff;font-size:1rem}
+button{background:linear-gradient(90deg,#4285F4,#34A853);border:0;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
+button.ghost{background:#1c2440}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tab{padding:8px 14px;border-radius:999px;background:#1c2440;color:#cdd6e6;cursor:pointer;border:1px solid #2a3350}.tab.on{background:#fff;color:#111}
+.badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;margin:6px 0}
+.c-green{background:#123f2a;color:#5ff09a}.c-yellow{background:#4a3a10;color:#ffd54d}.c-orange{background:#4d2410;color:#ff9d5c}.c-red{background:#4d1414;color:#ff7a7a}
+.bar{height:10px;background:#222a45;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:conic-gradient(from 0deg,#4285F4,#EA4335,#FBBC05,#34A853);transition:width .6s}
+small.mut{color:#8b96ad}ul{line-height:1.55;margin:.4em 0;padding-left:1.2em}li{margin:.25em 0}a{color:#8ab4ff}
+.ctrl{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:#aab4c7}.ctrl input{width:130px;padding:0}
+canvas#evol{width:100%;height:180px;background:#0e1322;border:1px solid #2a3350;border-radius:12px}
+.check{display:flex;gap:8px;align-items:center;background:#0e1322;border:1px solid #2a3350;border-radius:10px;padding:8px 10px;margin:6px 0}
+.check input{width:auto}
+.tip{background:#0e1322;border-left:4px solid;border-radius:10px;padding:10px 12px;margin:8px 0}
+.tip.d{border-color:#EA4335}.tip.c{border-color:#4285F4}.tip.h{border-color:#FBBC05}.tip.v{border-color:#9b59c9}.tip.g{border-color:#34A853}
+.tip h4{margin:.1em 0 .3em;font-size:.95rem}
+.don a{display:inline-block;margin:4px 8px 4px 0;padding:9px 14px;border-radius:12px;text-decoration:none;font-weight:700;color:#fff}
+.don .ko{background:#ff5e5b}.don .pp{background:#0070ba}.don .st{background:#1c2440;border:1px solid #4285F4}
+footer{color:#8b96ad;font-size:.8rem;margin-top:20px}
+</style>
+</head>
+<body>
+<div class="ambient" id="ambient"><div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div><div class="blob" id="b4"></div></div>
+<div class="wrap">
+<header><div class="gemini-star">✦</div>
+<h1>Peso Saludable</h1>
+<div class="sub">Calcula tu IMC, recibe consejos adaptados y registra tu progreso · offline</div>
+</header>
+
+<div class="tabs">
+<button class="tab on" data-t="calc">Calculadora</button>
+<button class="tab" data-t="hab">Hábitos y consejos</button>
+<button class="tab" data-t="ev">Evidencia</button>
+<button class="tab" data-t="seg">Mi seguimiento</button>
+</div>
+
+<section id="calc" class="card">
+<div class="grid grid2">
+<div><label>Peso (kg)</label><input id="peso" type="number" value="82" min="30" max="300" step="0.1"></div>
+<div><label>Altura (m) ej. 1.70</label><input id="alt" type="number" value="1.70" min="1" max="2.3" step="0.01"></div>
+</div>
+<p><label>Marca tus condiciones para consejos adaptados:</label></p>
+<div class="grid grid2">
+<label class="check"><input type="checkbox" id="cDiab"> Diabetes</label>
+<label class="check"><input type="checkbox" id="cLip"> Colesterol alto</label>
+<label class="check"><input type="checkbox" id="cHta"> Hipertensión</label>
+<label class="check"><input type="checkbox" id="cCvd"> Enf. cardiovascular</label>
+</div>
+<p><button id="btnCalc">Calcular</button> <button id="btnThink" class="ghost">✨ Imagina el cambio</button></p>
+<div id="res"></div>
+<div class="ctrl" style="margin-top:12px">
+<label>Intensidad <input id="rInt" type="range" min="0" max="100" value="65"></label>
+<label>Blur <input id="rBlur" type="range" min="0" max="120" value="56"></label>
+<label>Spread <input id="rSpr" type="range" min="20" max="130" value="75"></label>
+</div>
+</section>
+
+<section id="hab" class="card" hidden>
+<h2>Consejos</h2>
+<div id="tips"></div>
+</section>
+
+<section id="ev" class="card" hidden>
+<h2>En qué se basa</h2>
+<p>Estudio en 2330 pacientes de atención primaria con sobrepeso u obesidad (JABFM 2009;22(5):544):</p>
+<ul>
+<li>Registrar el peso en la historia clínica multiplicaba las probabilidades de recibir consejo (OR hasta 7.2).</li>
+<li>Las comorbilidades (diabetes, colesterol, hipertensión, ECV) también aumentaban el manejo (OR 1.2-4.8).</li>
+<li>Pocos recibían derivación a nutrición (&lt;25%) aunque la necesitaban.</li>
+</ul>
+<p><a href="https://www.jabfm.org/content/22/5/544" target="_blank" rel="noopener">Artículo completo (JABFM)</a></p>
+<h3>Referencias MedlinePlus (español)</h3>
+<ul>
+<li><a href="https://medlineplus.gov/spanish/ency/article/007297.htm" target="_blank" rel="noopener">Obesidad</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000348.htm" target="_blank" rel="noopener">Riesgos de la obesidad</a></li>
+<li><a href="https://medlineplus.gov/spanish/diabetestype2.html" target="_blank" rel="noopener">Diabetes tipo 2</a> · <a href="https://medlineplus.gov/spanish/howtopreventdiabetes.html" target="_blank" rel="noopener">Cómo prevenirla</a></li>
+<li><a href="https://medlineplus.gov/spanish/cholesterol.html" target="_blank" rel="noopener">Colesterol</a></li>
+<li><a href="https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm" target="_blank" rel="noopener">Dieta DASH para hipertensión</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000101.htm" target="_blank" rel="noopener">Control de la hipertensión</a></li>
+<li><a href="https://medlineplus.gov/spanish/howtopreventheartdisease.html" target="_blank" rel="noopener">Prevenir enfermedades del corazón</a></li>
+</ul>
+</section>
+
+<section id="seg" class="card" hidden>
+<h2>Mi seguimiento</h2>
+<div class="grid grid3">
+<div><label>Peso hoy (kg)</label><input id="wHoy" type="number" step="0.1"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
+<div><label>Pasos hoy</label><input id="pHoy" type="number"><button id="btnP" class="ghost" style="margin-top:8px">Guardar registro</button></div>
+<div><label>Vasos agua (0-12)</label><input id="aHoy" type="number" min="0" max="12"><button id="btnA" class="ghost" style="margin-top:8px">Guardar registro</button></div>
+</div>
+<p><canvas id="evol" width="800" height="180"></canvas><br>
+<small class="mut">🟢 bajó · 🟡 igual · 🔴 subió</small></p>
+<div id="log"></div>
+</section>
+
+<section class="card don">
+<h2>Apoyar el proyecto</h2>
+<p>¿Te gustó el proyecto? Si quieres colaborar voluntariamente, puedes invitarme a un cafecito o mate.</p>
+<p>
+<a class="ko" href="https://ko-fi.com/martinmartinezgarcia" target="_blank" rel="noopener">☕ Ko-fi</a>
+<a class="pp" href="https://www.paypal.com/paypalme/blufferedtwitch" target="_blank" rel="noopener">💙 PayPal</a>
+<a class="st" href="https://starlink.com/es?referral=RC-DF-5848974-78640-68&app_source=share" target="_blank" rel="noopener">🛰️ Internet satelital Starlink</a>
+</p>
+<small class="mut">El enlace de Starlink es de afiliado; puede ofrecerte el primer mes según las condiciones vigentes de Starlink.</small>
+</section>
+
+<footer>Información educativa basada en las fuentes citadas; no reemplaza la consulta médica.</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');['calc','hab','ev','seg'].forEach(i=>$(i).hidden=i!==b.dataset.t)});
+$('btnThink').onclick=()=>{const c=$('calc');c.classList.add('think');setTimeout(()=>c.classList.remove('think'),1800)};
+function amb(cat){const a={n:['#34A853','#4285F4'],s:['#FBBC05','#FBBC05'],l:['#EA4335','#FBBC05'],m:['#EA4335','#EA4335']}[cat]||['#4285F4','#34A853'];$('b1').style.background=a[0];$('b2').style.background=a[1];}
+function updAmb(){ $('ambient').style.setProperty('--int',$('rInt').value/100);$('ambient').style.setProperty('--blur',$('rBlur').value+'px');const s=$('rSpr').value/100;$('ambient').style.transform=`scale(${0.7+s*0.5})`;}
+['rInt','rBlur','rSpr'].forEach(id=>$(id).oninput=updAmb);updAmb();
+
+function getCom(){return{diab:$('cDiab').checked,lip:$('cLip').checked,hta:$('cHta').checked,cvd:$('cCvd').checked};}
+
+function renderTips(){
+const com=getCom(),T=[];
+T.push({cls:'g',t:'🥗 Base para todos',ul:['Plato: ½ verduras, ¼ proteína magra, ¼ cereal integral.','Bebidas azucaradas → agua.','150 min/sem de actividad moderada + 2 de fuerza.','Dormir 7-9 h.']});
+if(com.diab)T.push({cls:'d',t:'🩸 Diabetes',ul:['Perder 4.5 kg ya ayuda a controlar la glucosa.','Distribuye carbohidratos en el día; prioriza fibra.','Camina 10-15 min después de comer.'],link:['https://medlineplus.gov/spanish/diabetestype2.html','MedlinePlus: Diabetes tipo 2']});
+if(com.lip)T.push({cls:'c',t:'💛 Colesterol alto',ul:['Menos grasas saturadas y trans; más avena, legumbres, frutos secos.','Pescado 2 veces por semana.'],link:['https://medlineplus.gov/spanish/cholesterol.html','MedlinePlus: Colesterol']});
+if(com.hta)T.push({cls:'h',t:'🧂 Hipertensión',ul:['Dieta DASH: frutas, verduras, lácteos bajos en grasa.','Reduce la sal; cocina con hierbas y limón.','Alcohol: máx. 1 trago/día mujeres, 2 hombres.'],link:['https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm','MedlinePlus: Dieta DASH']});
+if(com.cvd)T.push({cls:'v',t:'❤️ Enfermedad cardiovascular',ul:['Controla presión, colesterol y peso con tu médico.','Actividad física regular adaptada a tu condición.','No fumes; el tabaco multiplica el riesgo.'],link:['https://medlineplus.gov/spanish/howtopreventheartdisease.html','MedlinePlus: Prevenir enf. del corazón']});
+T.push({cls:'g',t:'🩺 Habla con tu médico',ul:['Pide que registren tu IMC y un plan de dieta y ejercicio.','Pregunta por derivación a nutrición si tu IMC ≥ 30.'],link:['https://medlineplus.gov/spanish/ency/article/007297.htm','MedlinePlus: Obesidad']});
+$('tips').innerHTML=T.map(x=>`<div class="tip ${x.cls}"><h4>${x.t}</h4><ul>${x.ul.map(u=>`<li>${u}</li>`).join('')}</ul>${x.link?`<a href="${x.link[0]}" target="_blank" rel="noopener">${x.link[1]} →</a>`:''}</div>`).join('');
+}
+
+function calc(){
+const p=+$('peso').value,h=+$('alt').value;if(!p||!h)return;const imc=p/(h*h);let cat,cls,txt;
+if(imc<18.5){cat='n';cls='c-green';txt='Bajo peso';}
+else if(imc<25){cat='n';cls='c-green';txt='Normopeso';}
+else if(imc<30){cat='s';cls='c-yellow';txt='Sobrepeso';}
+else if(imc<35){cat='l';cls='c-orange';txt='Obesidad leve';}
+else{cat='m';cls='c-red';txt='Obesidad moderada/severa';}
+amb(cat);
+const com=Object.values(getCom()).filter(Boolean).length;
+$('res').innerHTML=`<div class="badge ${cls}">IMC ${imc.toFixed(1)} · ${txt}</div>
+<div class="bar"><i style="width:${Math.min(100,imc/40*100)}%"></i></div>
+<p>${imc>=25?`Meta inicial realista: perder 5-10% de tu peso (${(p*0.05).toFixed(1)}-${(p*0.10).toFixed(1)} kg).`:'Mantén tus hábitos actuales.'}
+${com>0?`<br>${com} condición(es) marcada(s): mira la pestaña <b>Hábitos y consejos</b> para recomendaciones adaptadas.`:`Marca condiciones arriba para ver consejos adaptados en <b>Hábitos y consejos</b>.`}</p>`;
+renderTips();}
+$('btnCalc').onclick=calc;
+['cDiab','cLip','cHta','cCvd'].forEach(id=>$(id).onchange=()=>{renderTips();});
+calc();
+
+// seguimiento
+const k='pesoAppV1';let d=JSON.parse(localStorage.getItem(k)||'{"w":[],"p":[],"a":[]}');
+function save(){localStorage.setItem(k,JSON.stringify(d));draw();}
+function draw(){
+const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,180);
+const w=d.w.slice(-30);if(!w.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guarda tu primer peso para ver la gráfica.',20,90);}
+else{
+const mn=Math.min(...w)-2,mx=Math.max(...w)+2,px=i=>20+i/(Math.max(1,w.length-1))*760,py=v=>165-(v-mn)/(mx-mn||1)*145;
+for(let i=0;i<w.length;i++){
+ if(i>0){const up=w[i]>w[i-1],eq=w[i]===w[i-1];const col=eq?'#FBBC05':up?'#EA4335':'#34A853';
+  const g=x.createLinearGradient(px(i-1),0,px(i),0);g.addColorStop(0,col);g.addColorStop(1,col==='#EA4335'?'#FBBC05':col==='#34A853'?'#4285F4':'#9b59c9');
+  x.strokeStyle=g;x.lineWidth=3;x.beginPath();x.moveTo(px(i-1),py(w[i-1]));x.lineTo(px(i),py(w[i]));x.stroke();}
+ const up=i>0&&w[i]>w[i-1],eq=i>0&&w[i]===w[i-1];const col=i===0?'#4285F4':eq?'#FBBC05':up?'#EA4335':'#34A853';
+ x.fillStyle=col;x.shadowColor=col;x.shadowBlur=10;x.beginPath();x.arc(px(i),py(w[i]),6,0,7);x.fill();x.shadowBlur=0;
+ x.fillStyle='#cdd6e6';x.font='10px system-ui';x.fillText(w[i],px(i)-8,py(w[i])-12);}
+}
+$('log').innerHTML=`<small class="mut">Registros peso: ${d.w.join(', ')||'—'} · pasos totales: ${d.p.reduce((a,b)=>a+b,0)} · agua hoy: ${d.a.slice(-1)[0]??'—'} vasos</small>`;}
+$('btnW').onclick=()=>{if($('wHoy').value){d.w.push(+$('wHoy').value);save();}};
+$('btnP').onclick=()=>{if($('pHoy').value){d.p.push(+$('pHoy').value);save();}};
+$('btnA').onclick=()=>{if($('aHoy').value!==''){d.a.push(+$('aHoy').value);save();}};
+draw();
+</script>
+</body>
+</html>
