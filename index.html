@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Peso Saludable · App Interactiva Offline</title>
+<title>Control de peso saludable · App interactiva online y offline</title>
 <style>
 @property --angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e17;color:#e8ecf4;min-height:100vh;overflow-x:hidden}
@@ -29,13 +29,17 @@ h1{margin:.2em 0;font-size:1.7rem}
 label{font-size:.85rem;color:#aab4c7}input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3350;background:#0e1322;color:#fff;font-size:1rem}
 button{background:linear-gradient(90deg,#4285F4,#34A853);border:0;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
 button.ghost{background:#1c2440}
+button.btn-pasos{background:linear-gradient(90deg,#FBBC05,#EA4335)}
+button.btn-agua{background:linear-gradient(90deg,#4285F4,#9b72cb)}
 .tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tab{padding:8px 14px;border-radius:999px;background:#1c2440;color:#cdd6e6;cursor:pointer;border:1px solid #2a3350}.tab.on{background:#fff;color:#111}
 .badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;margin:6px 0}
 .c-green{background:#123f2a;color:#5ff09a}.c-yellow{background:#4a3a10;color:#ffd54d}.c-orange{background:#4d2410;color:#ff9d5c}.c-red{background:#4d1414;color:#ff7a7a}
 .bar{height:10px;background:#222a45;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:conic-gradient(from 0deg,#4285F4,#EA4335,#FBBC05,#34A853);transition:width .6s}
 small.mut{color:#8b96ad}ul{line-height:1.55;margin:.4em 0;padding-left:1.2em}li{margin:.25em 0}a{color:#8ab4ff}
 .ctrl{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:#aab4c7}.ctrl input{width:130px;padding:0}
-canvas#evol{width:100%;height:180px;background:#0e1322;border:1px solid #2a3350;border-radius:12px}
+canvas#evol{width:100%;height:220px;background:#0e1322;border:1px solid #2a3350;border-radius:12px;cursor:crosshair}
+.tip-chart{position:absolute;pointer-events:none;background:#111624;border:1px solid #2a3350;border-radius:8px;padding:6px 10px;font-size:.8rem;display:none;z-index:2;white-space:nowrap}
+.chart-wrap{position:relative}
 .check{display:flex;gap:8px;align-items:center;background:#0e1322;border:1px solid #2a3350;border-radius:10px;padding:8px 10px;margin:6px 0}
 .check input{width:auto}
 .tip{background:#0e1322;border-left:4px solid;border-radius:10px;padding:10px 12px;margin:8px 0}
@@ -110,11 +114,11 @@ footer{color:#8b96ad;font-size:.8rem;margin-top:20px}
 <h2>Mi seguimiento</h2>
 <div class="grid grid3">
 <div><label>Peso hoy (kg)</label><input id="wHoy" type="number" step="0.1"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
-<div><label>Pasos hoy</label><input id="pHoy" type="number"><button id="btnP" class="ghost" style="margin-top:8px">Guardar registro</button></div>
-<div><label>Vasos agua (0-12)</label><input id="aHoy" type="number" min="0" max="12"><button id="btnA" class="ghost" style="margin-top:8px">Guardar registro</button></div>
+<div><label>Pasos hoy (meta 10.000)</label><input id="pHoy" type="number"><button id="btnP" class="btn-pasos" style="margin-top:8px">Guardar registro</button></div>
+<div><label>Vasos agua hoy (meta 8)</label><input id="aHoy" type="number" min="0" max="12"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
 </div>
-<p><canvas id="evol" width="800" height="180"></canvas><br>
-<small class="mut">🟢 bajó · 🟡 igual · 🔴 subió</small></p>
+<p class="chart-wrap"><canvas id="evol" width="800" height="220"></canvas><span id="chartTip" class="tip-chart"></span><br>
+<small class="mut">🟢 peso · 🟡 pasos (10.000) · 🔵 vasos (8) · un valor por día (si guardás de nuevo, se actualiza el de hoy)</small></p>
 <div id="log"></div>
 </section>
 
@@ -170,26 +174,71 @@ $('btnCalc').onclick=calc;
 ['cDiab','cLip','cHta','cCvd'].forEach(id=>$(id).onchange=()=>{renderTips();});
 calc();
 
-// seguimiento
-const k='pesoAppV1';let d=JSON.parse(localStorage.getItem(k)||'{"w":[],"p":[],"a":[]}');
-function save(){localStorage.setItem(k,JSON.stringify(d));draw();}
-function draw(){
-const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,180);
-const w=d.w.slice(-30);if(!w.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guarda tu primer peso para ver la gráfica.',20,90);}
-else{
-const mn=Math.min(...w)-2,mx=Math.max(...w)+2,px=i=>20+i/(Math.max(1,w.length-1))*760,py=v=>165-(v-mn)/(mx-mn||1)*145;
-for(let i=0;i<w.length;i++){
- if(i>0){const up=w[i]>w[i-1],eq=w[i]===w[i-1];const col=eq?'#FBBC05':up?'#EA4335':'#34A853';
-  const g=x.createLinearGradient(px(i-1),0,px(i),0);g.addColorStop(0,col);g.addColorStop(1,col==='#EA4335'?'#FBBC05':col==='#34A853'?'#4285F4':'#9b59c9');
-  x.strokeStyle=g;x.lineWidth=3;x.beginPath();x.moveTo(px(i-1),py(w[i-1]));x.lineTo(px(i),py(w[i]));x.stroke();}
- const up=i>0&&w[i]>w[i-1],eq=i>0&&w[i]===w[i-1];const col=i===0?'#4285F4':eq?'#FBBC05':up?'#EA4335':'#34A853';
- x.fillStyle=col;x.shadowColor=col;x.shadowBlur=10;x.beginPath();x.arc(px(i),py(w[i]),6,0,7);x.fill();x.shadowBlur=0;
- x.fillStyle='#cdd6e6';x.font='10px system-ui';x.fillText(w[i],px(i)-8,py(w[i])-12);}
+// seguimiento diario
+const META_P=10000,META_A=8,k='pesoAppV2',kOld='pesoAppV1';
+function iso(off=0){const t=new Date();t.setHours(12,0,0,0);t.setDate(t.getDate()+off);return t.toISOString().slice(0,10);}
+function migrate(raw){
+ if(raw&&raw.hist) return raw;
+ const map={};
+ function add(arr,key){
+  for(let i=0;i<(arr||[]).length;i++){
+   const ds=iso(-(arr.length-1-i));
+   if(!map[ds]) map[ds]={date:ds};
+   map[ds][key]=arr[i];
+  }
+ }
+ if(raw){add(raw.w,'w');add(raw.p,'p');add(raw.a,'a');}
+ return {hist:Object.values(map).sort((a,b)=>a.date.localeCompare(b.date))};
 }
-$('log').innerHTML=`<small class="mut">Registros peso: ${d.w.join(', ')||'—'} · pasos totales: ${d.p.reduce((a,b)=>a+b,0)} · agua hoy: ${d.a.slice(-1)[0]??'—'} vasos</small>`;}
-$('btnW').onclick=()=>{if($('wHoy').value){d.w.push(+$('wHoy').value);save();}};
-$('btnP').onclick=()=>{if($('pHoy').value){d.p.push(+$('pHoy').value);save();}};
-$('btnA').onclick=()=>{if($('aHoy').value!==''){d.a.push(+$('aHoy').value);save();}};
+let d=migrate(JSON.parse(localStorage.getItem(k)||localStorage.getItem(kOld)||'{}'));
+function save(){localStorage.setItem(k,JSON.stringify(d));draw();}
+function upsert(key,val){
+ const t=iso();let e=d.hist.find(x=>x.date===t);
+ if(!e){e={date:t};d.hist.push(e);d.hist.sort((a,b)=>a.date.localeCompare(b.date));}
+ e[key]=val;save();
+}
+let hits=[];
+function draw(){
+ const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,220);hits=[];
+ const h=d.hist.slice(-30);
+ if(!h.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guardá un registro diario para ver la gráfica.',20,110);$('log').innerHTML='';return;}
+ const ws=h.map(e=>e.w).filter(v=>v!=null);
+ const mn=ws.length?Math.min(...ws)-2:0,mx=ws.length?Math.max(...ws)+2:1;
+ const px=i=>28+i/(Math.max(1,h.length-1))*750;
+ const pyKg=v=>190-(v-mn)/(mx-mn||1)*160;
+ const pyPct=v=>190-Math.min(1.2,v)*160/1.2;
+ x.strokeStyle='#2a3350';x.lineWidth=1;x.setLineDash([4,4]);x.beginPath();x.moveTo(20,pyPct(1));x.lineTo(790,pyPct(1));x.stroke();x.setLineDash([]);
+ x.fillStyle='#8b96ad';x.font='10px system-ui';x.fillText('100% meta pasos/agua',32,pyPct(1)-4);
+ function line(key,col,yOf,label,fmt){
+  const pts=h.map((e,i)=>e[key]==null?null:{i,e,y:yOf(e[key])}).filter(Boolean);
+  x.strokeStyle=col;x.lineWidth=2.5;x.beginPath();
+  pts.forEach((p,n)=>{if(n){const prev=pts[n-1];if(prev.i===p.i-1){x.lineTo(px(p.i),p.y);}else{x.moveTo(px(p.i),p.y);}}else x.moveTo(px(p.i),p.y);});
+  x.stroke();
+  pts.forEach(p=>{
+   x.fillStyle=col;x.shadowColor=col;x.shadowBlur=8;x.beginPath();x.arc(px(p.i),p.y,5,0,7);x.fill();x.shadowBlur=0;
+   hits.push({x:px(p.i),y:p.y,label,val:fmt(p.e[key]),date:p.e.date,col});
+  });
+ }
+ line('w','#34A853',pyKg,'Peso',v=>v+' kg');
+ line('p','#FBBC05',v=>pyPct(v/META_P),'Pasos',v=>v.toLocaleString('es')+' / '+META_P.toLocaleString('es'));
+ line('a','#4285F4',v=>pyPct(v/META_A),'Agua',v=>v+' / '+META_A+' vasos');
+ const last=h[h.length-1];
+ $('log').innerHTML=`<small class="mut">Hoy ${last.date}: peso ${last.w??'—'} kg · pasos ${last.p??'—'} · agua ${last.a??'—'} vasos · ${h.length} día(s)</small>`;
+}
+const tip=$('chartTip'),cv=$('evol');
+cv.onmousemove=ev=>{
+ const r=cv.getBoundingClientRect(),sx=cv.width/r.width,sy=cv.height/r.height;
+ const mx=(ev.clientX-r.left)*sx,my=(ev.clientY-r.top)*sy;
+ let best=null,bd=14;
+ hits.forEach(h=>{const dd=Math.hypot(h.x-mx,h.y-my);if(dd<bd){bd=dd;best=h;}});
+ if(!best){tip.style.display='none';return;}
+ tip.style.display='block';tip.style.left=(ev.clientX-r.left+10)+'px';tip.style.top=(ev.clientY-r.top-28)+'px';
+ tip.style.borderColor=best.col;tip.innerHTML=`<b style="color:${best.col}">${best.label}</b> · ${best.val}<br><span class="mut">${best.date}</span>`;
+};
+cv.onmouseleave=()=>{tip.style.display='none';};
+$('btnW').onclick=()=>{if($('wHoy').value) upsert('w',+$('wHoy').value);};
+$('btnP').onclick=()=>{if($('pHoy').value) upsert('p',+$('pHoy').value);};
+$('btnA').onclick=()=>{if($('aHoy').value!=='') upsert('a',+$('aHoy').value);};
 draw();
 </script>
 </body>
