@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Control de peso saludable · App interactiva online y offline</title>
+<meta name="description" content="Pesos saludables y estilos de vida: calcula tu IMC, recibe consejos educativos adaptados y registra tus hábitos. Funciona online y offline. Solo para adultos (18+).">
+<title>Pesos saludables y estilos de vida · Calculadora, consejos y seguimiento</title>
 <style>
 @property --angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e17;color:#e8ecf4;min-height:100vh;overflow-x:hidden}
@@ -19,8 +20,8 @@
 header{text-align:center;padding:18px 0}
 .gemini-star{display:inline-block;font-size:42px;background:conic-gradient(from var(--angle),#4285F4,#EA4335,#FBBC05,#34A853,#4285F4);-webkit-background-clip:text;background-clip:text;color:transparent;animation:spin 6s linear infinite}
 @keyframes spin{to{--angle:360deg}}
-h1{margin:.2em 0;font-size:1.7rem}
-.sub{color:#aab4c7;font-size:.95rem}
+h1{margin:.2em 0;font-size:clamp(1.35rem,4.2vw,2rem);text-wrap:balance}
+.sub{color:#aab4c7;font-size:.95rem;max-width:42rem;margin:0 auto;text-wrap:pretty}
 .card{position:relative;background:rgba(17,22,36,.88);border-radius:18px;padding:18px;margin:16px 0;isolation:isolate}
 .card::before{content:"";position:absolute;inset:-2px;border-radius:20px;z-index:-1;background:conic-gradient(from var(--angle),#4285F4,#9b72cb,#EA4335,#FBBC05,#34A853,#4285F4);animation:spin 8s linear infinite;filter:blur(1px);opacity:.9}
 .card::after{content:"";position:absolute;inset:0;border-radius:18px;background:#111624;z-index:-1}
@@ -28,10 +29,18 @@ h1{margin:.2em 0;font-size:1.7rem}
 .grid{display:grid;gap:12px}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr 1fr}}
 label{font-size:.85rem;color:#aab4c7}input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3350;background:#0e1322;color:#fff;font-size:1rem}
 button{background:linear-gradient(90deg,#4285F4,#34A853);border:0;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
-button.ghost{background:#1c2440}
 button.btn-pasos{background:linear-gradient(90deg,#FBBC05,#EA4335)}
 button.btn-agua{background:linear-gradient(90deg,#4285F4,#9b72cb)}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}.tab{padding:8px 14px;border-radius:999px;background:#1c2440;color:#cdd6e6;cursor:pointer;border:1px solid #2a3350}.tab.on{background:#fff;color:#111}
+.btn-think{background:linear-gradient(120deg,#6d4aff,#9b72cb 50%,#c06cff);background-size:180% 180%;background-position:0% 50%;box-shadow:0 6px 18px -6px rgba(155,114,203,.75);transition:background-position .45s ease,box-shadow .3s ease,transform .15s ease}
+.btn-think:hover{background-position:100% 50%;box-shadow:0 8px 24px -6px rgba(192,108,255,.85)}
+.btn-think:active{transform:translateY(1px)}
+.btn-think:focus-visible{outline:2px solid #c06cff;outline-offset:2px}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.tab{--acc:#8ab4ff;padding:9px 14px;border-radius:999px;background:#1c2440;color:#cdd6e6;cursor:pointer;border:1px solid #2a3350;font-weight:600;font-size:.92rem;transition:background .2s,border-color .2s,box-shadow .2s,color .2s}
+.tab:hover{border-color:var(--acc);box-shadow:0 0 12px -2px var(--acc);color:#fff}
+.tab:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.tab.on{background:color-mix(in srgb,var(--acc) 22%,#131a2c);border-color:var(--acc);color:#fff;font-weight:800;box-shadow:0 0 16px -4px var(--acc)}
+.tab.t-calc{--acc:#34A853}.tab.t-hab{--acc:#4285F4}.tab.t-ev{--acc:#FBBC05}.tab.t-seg{--acc:#9b72cb}
 .badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;margin:6px 0}
 .c-green{background:#123f2a;color:#5ff09a}.c-yellow{background:#4a3a10;color:#ffd54d}.c-orange{background:#4d2410;color:#ff9d5c}.c-red{background:#4d1414;color:#ff7a7a}
 .bar{height:10px;background:#222a45;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:conic-gradient(from 0deg,#4285F4,#EA4335,#FBBC05,#34A853);transition:width .6s}
@@ -40,44 +49,78 @@ small.mut{color:#8b96ad}ul{line-height:1.55;margin:.4em 0;padding-left:1.2em}li{
 canvas#evol{width:100%;height:220px;background:#0e1322;border:1px solid #2a3350;border-radius:12px;cursor:crosshair}
 .tip-chart{position:absolute;pointer-events:none;background:#111624;border:1px solid #2a3350;border-radius:8px;padding:6px 10px;font-size:.8rem;display:none;z-index:2;white-space:nowrap}
 .chart-wrap{position:relative}
-.check{display:flex;gap:8px;align-items:center;background:#0e1322;border:1px solid #2a3350;border-radius:10px;padding:8px 10px;margin:6px 0}
-.check input{width:auto}
+.checks{display:grid;gap:8px;grid-template-columns:1fr}
+@media(min-width:640px){.checks{grid-template-columns:1fr 1fr}}
+.check{display:flex;gap:8px;align-items:center;background:#0e1322;border:1px solid #2a3350;border-left:3px solid var(--acc,#2a3350);border-radius:10px;padding:10px 12px;margin:0;min-height:44px;cursor:pointer;font-size:.92rem;color:#dfe6f2}
+.check:hover{border-color:var(--acc,#8ab4ff)}
+.check input{width:auto;flex:none}
+.check:has(input:checked){background:#131b30;border-color:var(--acc);box-shadow:0 0 10px -4px var(--acc)}
+.check input:focus-visible{outline:2px solid var(--acc,#8ab4ff);outline-offset:2px}
+.acc-d{--acc:#EA4335}.acc-c{--acc:#4285F4}.acc-h{--acc:#FBBC05}.acc-v{--acc:#9b59c9}.acc-p{--acc:#e879a9}.acc-t{--acc:#f0a6ca}.acc-k{--acc:#2dd4bf}.acc-m{--acc:#ff9d5c}.acc-u{--acc:#d4b106}.acc-s{--acc:#c9836b}
+.note{background:#0e1322;border:1px solid #2a3350;border-left:4px solid #FBBC05;border-radius:10px;padding:10px 12px;font-size:.85rem;color:#aab4c7;margin:10px 0;line-height:1.5}
+.note.warn{border-left-color:#EA4335}
+.note.ok{border-left-color:#34A853}
+.note.blue{border-left-color:#4285F4}
+.note.purple{border-left-color:#9b72cb}
+.err{color:#ff9d9d;background:#3a1414;border:1px solid #5c2020;border-radius:8px;padding:8px 10px;font-size:.9rem}
 .tip{background:#0e1322;border-left:4px solid;border-radius:10px;padding:10px 12px;margin:8px 0}
 .tip.d{border-color:#EA4335}.tip.c{border-color:#4285F4}.tip.h{border-color:#FBBC05}.tip.v{border-color:#9b59c9}.tip.g{border-color:#34A853}
+.tip.p{border-color:#e879a9}.tip.t{border-color:#f0a6ca}.tip.k{border-color:#2dd4bf}.tip.m{border-color:#ff9d5c}.tip.u{border-color:#d4b106}.tip.s{border-color:#c9836b}.tip.x{border-color:#8b96ad}
 .tip h4{margin:.1em 0 .3em;font-size:.95rem}
 .don a{display:inline-block;margin:4px 8px 4px 0;padding:9px 14px;border-radius:12px;text-decoration:none;font-weight:700;color:#fff}
 .don .ko{background:#ff5e5b}.don .pp{background:#0070ba}.don .st{background:#1c2440;border:1px solid #4285F4}
-footer{color:#8b96ad;font-size:.8rem;margin-top:20px}
+details.ev{background:#0e1322;border:1px solid #2a3350;border-radius:12px;padding:10px 12px;margin:8px 0}
+details.ev summary{cursor:pointer;font-weight:700;color:#ffd54d;font-size:1rem}
+details.ev summary:focus-visible{outline:2px solid #FBBC05;outline-offset:2px}
+details.ev[open] summary{margin-bottom:6px}
+.refs{margin:.3em 0;padding-left:1.1em}
+.refs li{margin:.5em 0;font-size:.92rem;line-height:1.5}
+.rtype{display:inline-block;font-size:.75rem;background:#1c2440;border:1px solid #2a3350;border-radius:999px;padding:1px 8px;margin-right:6px;color:#cdd6e6;white-space:nowrap}
+footer{color:#8b96ad;font-size:.8rem;margin-top:20px;line-height:1.6}
+footer p{margin:.4em 0}
+:focus-visible{outline:2px solid #8ab4ff;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){
+ .blob,.card::before,.gemini-star{animation:none!important}
+ *{transition-duration:.01ms!important}
+}
 </style>
 </head>
 <body>
 <div class="ambient" id="ambient"><div class="blob" id="b1"></div><div class="blob" id="b2"></div><div class="blob" id="b3"></div><div class="blob" id="b4"></div></div>
 <div class="wrap">
-<header><div class="gemini-star">✦</div>
-<h1>Peso Saludable</h1>
-<div class="sub">Calcula tu IMC, recibe consejos adaptados y registra tu progreso · offline</div>
+<header><div class="gemini-star" aria-hidden="true">✦</div>
+<h1>Pesos saludables y estilos de vida</h1>
+<div class="sub">Dale seguimiento a tus buenos hábitos, recibe consejos adaptados y registra tu progreso.</div>
 </header>
 
-<div class="tabs">
-<button class="tab on" data-t="calc">Calculadora</button>
-<button class="tab" data-t="hab">Hábitos y consejos</button>
-<button class="tab" data-t="ev">Evidencia</button>
-<button class="tab" data-t="seg">Mi seguimiento</button>
+<div class="tabs" role="tablist" aria-label="Secciones de la aplicación">
+<button class="tab t-calc on" role="tab" id="tab-calc" aria-selected="true" aria-controls="calc" data-t="calc">Calculadora</button>
+<button class="tab t-hab" role="tab" id="tab-hab" aria-selected="false" aria-controls="hab" data-t="hab" tabindex="-1">Hábitos y consejos</button>
+<button class="tab t-ev" role="tab" id="tab-ev" aria-selected="false" aria-controls="ev" data-t="ev" tabindex="-1">Evidencia</button>
+<button class="tab t-seg" role="tab" id="tab-seg" aria-selected="false" aria-controls="seg" data-t="seg" tabindex="-1">Mi seguimiento</button>
 </div>
 
-<section id="calc" class="card">
+<section id="calc" class="card" role="tabpanel" aria-labelledby="tab-calc" tabindex="0">
+<p class="note"><strong>Personas adultas (18+).</strong> Esta herramienta está diseñada para personas adultas (18 o más años). No está adaptada para evaluar peso, IMC o crecimiento en niños y adolescentes.</p>
 <div class="grid grid2">
-<div><label>Peso (kg)</label><input id="peso" type="number" value="82" min="30" max="300" step="0.1"></div>
-<div><label>Altura (m) ej. 1.70</label><input id="alt" type="number" value="1.70" min="1" max="2.3" step="0.01"></div>
+<div><label for="peso">Peso (kg)</label><input id="peso" type="number" value="82" min="30" max="300" step="0.1" inputmode="decimal"></div>
+<div><label for="alt">Altura (m) ej. 1.70</label><input id="alt" type="number" value="1.70" min="1" max="2.3" step="0.01" inputmode="decimal"></div>
 </div>
-<p><label>Marca tus condiciones para consejos adaptados:</label></p>
-<div class="grid grid2">
-<label class="check"><input type="checkbox" id="cDiab"> Diabetes</label>
-<label class="check"><input type="checkbox" id="cLip"> Colesterol alto</label>
-<label class="check"><input type="checkbox" id="cHta"> Hipertensión</label>
-<label class="check"><input type="checkbox" id="cCvd"> Enf. cardiovascular</label>
+<p><strong>Marca tus condiciones para consejos adaptados:</strong></p>
+<p class="note blue">Selecciona únicamente las situaciones que correspondan a tu caso. Esta herramienta ofrece información educativa general y no realiza diagnósticos.</p>
+<div class="checks">
+<label class="check acc-d"><input type="checkbox" id="cDiab"> Diabetes</label>
+<label class="check acc-c"><input type="checkbox" id="cLip"> Colesterol alto</label>
+<label class="check acc-h"><input type="checkbox" id="cHta"> Hipertensión</label>
+<label class="check acc-v"><input type="checkbox" id="cCvd"> Enf. cardiovascular</label>
+<label class="check acc-p"><input type="checkbox" id="cPreg"> Embarazo</label>
+<label class="check acc-t"><input type="checkbox" id="cLact"> Lactancia</label>
+<label class="check acc-k"><input type="checkbox" id="cRenal"> Enfermedad renal</label>
+<label class="check acc-m"><input type="checkbox" id="cMayor"> Adulto mayor</label>
+<label class="check acc-u"><input type="checkbox" id="cGota"> Hiperuricemia / gota</label>
+<label class="check acc-s"><input type="checkbox" id="cGastrica"> Patología gástrica / gastrointestinal</label>
 </div>
-<p><button id="btnCalc">Calcular</button> <button id="btnThink" class="ghost">✨ Imagina el cambio</button></p>
+<p><button id="btnCalc">Calcular</button> <button id="btnThink" class="btn-think">✨ Imagina el cambio</button></p>
 <div id="res"></div>
 <div class="ctrl" style="margin-top:12px">
 <label>Intensidad <input id="rInt" type="range" min="0" max="100" value="65"></label>
@@ -86,39 +129,140 @@ footer{color:#8b96ad;font-size:.8rem;margin-top:20px}
 </div>
 </section>
 
-<section id="hab" class="card" hidden>
+<section id="hab" class="card" hidden role="tabpanel" aria-labelledby="tab-hab" tabindex="0">
 <h2>Consejos</h2>
+<p class="note purple">Los consejos se adaptan a las casillas marcadas en la calculadora y tienen carácter educativo, no diagnóstico.</p>
 <div id="tips"></div>
 </section>
 
-<section id="ev" class="card" hidden>
+<section id="ev" class="card" hidden role="tabpanel" aria-labelledby="tab-ev" tabindex="0">
 <h2>En qué se basa</h2>
-<p>Estudio en 2330 pacientes de atención primaria con sobrepeso u obesidad (JABFM 2009;22(5):544):</p>
-<ul>
-<li>Registrar el peso en la historia clínica multiplicaba las probabilidades de recibir consejo (OR hasta 7.2).</li>
-<li>Las comorbilidades (diabetes, colesterol, hipertensión, ECV) también aumentaban el manejo (OR 1.2-4.8).</li>
-<li>Pocos recibían derivación a nutrición (&lt;25%) aunque la necesitaban.</li>
+<p class="note">Contenido educativo basado en guías y publicaciones científicas verificadas. Cada referencia indica su tipo: <span class="rtype">📘 Guía clínica</span><span class="rtype">🔬 Revisión sistemática</span><span class="rtype">📄 Estudio</span><span class="rtype">🏛️ Organismo oficial</span>. Los textos están incluidos en la página para funcionar sin conexión; los enlaces externos requieren internet.</p>
+
+<details class="ev" open>
+<summary>IMC y peso corporal</summary>
+<ul class="refs">
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2021 — El IMC como marcador sustituto de adiposidad: utilidad, clasificación en adultos y límites — <a href="https://cdn.who.int/media/docs/default-source/obesity/who-discussion-paper-on-obesity---final190821.pdf" target="_blank" rel="noopener noreferrer">WHO discussion paper on obesity</a></li>
+<li><span class="rtype">🔬 Revisión sistemática</span> <b>Okorodudu et al.</b> — 2010 — Rendimiento diagnóstico del IMC frente a la adiposidad corporal (Int J Obes) — <a href="https://pubmed.ncbi.nlm.nih.gov/20125098/" target="_blank" rel="noopener noreferrer">PubMed 20125098</a></li>
+<li><span class="rtype">📘 Guía / consenso</span> <b>Rubino et al. (The Lancet Diabetes &amp; Endocrinology)</b> — 2025 — Definición y criterios diagnósticos de obesidad clínica: el IMC solo sirve como cribado poblacional — <a href="https://pubmed.ncbi.nlm.nih.gov/39824205/" target="_blank" rel="noopener noreferrer">PubMed 39824205</a></li>
 </ul>
-<p><a href="https://www.jabfm.org/content/22/5/544" target="_blank" rel="noopener">Artículo completo (JABFM)</a></p>
-<h3>Referencias MedlinePlus (español)</h3>
-<ul>
-<li><a href="https://medlineplus.gov/spanish/ency/article/007297.htm" target="_blank" rel="noopener">Obesidad</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000348.htm" target="_blank" rel="noopener">Riesgos de la obesidad</a></li>
-<li><a href="https://medlineplus.gov/spanish/diabetestype2.html" target="_blank" rel="noopener">Diabetes tipo 2</a> · <a href="https://medlineplus.gov/spanish/howtopreventdiabetes.html" target="_blank" rel="noopener">Cómo prevenirla</a></li>
-<li><a href="https://medlineplus.gov/spanish/cholesterol.html" target="_blank" rel="noopener">Colesterol</a></li>
-<li><a href="https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm" target="_blank" rel="noopener">Dieta DASH para hipertensión</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000101.htm" target="_blank" rel="noopener">Control de la hipertensión</a></li>
-<li><a href="https://medlineplus.gov/spanish/howtopreventheartdisease.html" target="_blank" rel="noopener">Prevenir enfermedades del corazón</a></li>
+</details>
+
+<details class="ev">
+<summary>Hábitos y estilo de vida</summary>
+<ul class="refs">
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2020 — Directrices sobre actividad física y comportamiento sedentario: 150-300 min/sem de actividad moderada y fuerza 2 o más días — <a href="https://www.who.int/publications/i/item/9789240015128/" target="_blank" rel="noopener noreferrer">WHO guidelines</a></li>
+<li><span class="rtype">📘 Consenso</span> <b>AASM / Sleep Research Society</b> — 2015 — Adultos: dormir 7 o más horas por noche de forma regular — <a href="https://aasm.org/resources/pdf/adultsleepdurationconsensus.pdf" target="_blank" rel="noopener noreferrer">Consensus statement (PDF)</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>EFSA</b> — 2010 — Ingesta adecuada de agua total en adultos (2,0 L mujeres / 2,5 L hombres, incluye el agua de los alimentos): no hay una regla universal de "8 vasos" — <a href="https://www.efsa.europa.eu/en/press/news/nda100326" target="_blank" rel="noopener noreferrer">EFSA dietary reference values</a></li>
+<li><span class="rtype">🔬 Metaanálisis</span> <b>Paluch et al.</b> — 2022 — Pasos diarios y mortalidad (15 cohortes): los beneficios se observan por debajo de 10.000 pasos — <a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(21)00302-9/fulltext" target="_blank" rel="noopener noreferrer">Lancet Public Health</a></li>
+<li><span class="rtype">📘 Guía</span> <b>AHA</b> — 2021 — Guía dietética para mejorar la salud cardiovascular (Lichtenstein et al., Circulation) — <a href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001031" target="_blank" rel="noopener noreferrer">Circulation</a></li>
 </ul>
+</details>
+
+<details class="ev">
+<summary>Diabetes</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía clínica</span> <b>ADA</b> — 2025 — Standards of Care in Diabetes (§5 conductas de salud y §8 obesidad y control de peso): objetivos usuales de reducción de peso de 3-7 % cuando hay indicación — <a href="https://professional.diabetes.org/standards-of-care" target="_blank" rel="noopener noreferrer">American Diabetes Association</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Diabetes tipo 2, información para pacientes en español — <a href="https://medlineplus.gov/spanish/diabetestype2.html" target="_blank" rel="noopener noreferrer">MedlinePlus</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Hipertensión</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía</span> <b>AHA</b> — 2021 — Guía dietética para mejorar la salud cardiovascular: patrón DASH, menos sodio y alcohol (Lichtenstein et al., Circulation) — <a href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001031" target="_blank" rel="noopener noreferrer">Circulation</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Dieta DASH para la hipertensión, en español — <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm" target="_blank" rel="noopener noreferrer">MedlinePlus</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2023 — No existe un nivel de consumo de alcohol seguro para la salud: quien no bebe no debe empezar — <a href="https://www.who.int/europe/news-room/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health" target="_blank" rel="noopener noreferrer">WHO statement</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Dislipidemias (colesterol)</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía clínica</span> <b>AHA/ACC y sociedades</b> — 2018 — Guideline on the Management of Blood Cholesterol: patrón dietético cardioprotector, menos grasas saturadas, sin grasas trans — <a href="https://professional.heart.org/-/media/PHD-Files-2/Science-News/h/Highlights-of-the-2018-Guideline-on-the-Management-of-Blood-Cholesterol.pdf" target="_blank" rel="noopener noreferrer">Highlights (PDF)</a></li>
+<li><span class="rtype">📘 Guía</span> <b>AHA</b> — 2021 — Guía dietética para mejorar la salud cardiovascular (Lichtenstein et al., Circulation) — <a href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001031" target="_blank" rel="noopener noreferrer">Circulation</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Colesterol, información en español — <a href="https://medlineplus.gov/spanish/cholesterol.html" target="_blank" rel="noopener noreferrer">MedlinePlus</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Enfermedad cardiovascular</summary>
+<ul class="refs">
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>AHA</b> — Recomendaciones de dieta y estilo de vida para la salud del corazón — <a href="https://www.heart.org/en/healthy-living/healthy-eating/eat-smart/nutrition-basics/aha-diet-and-lifestyle-recommendations" target="_blank" rel="noopener noreferrer">heart.org</a></li>
+<li><span class="rtype">📘 Guía</span> <b>AHA</b> — 2021 — Guía dietética para mejorar la salud cardiovascular (Lichtenstein et al., Circulation) — <a href="https://www.ahajournals.org/doi/10.1161/CIR.0000000000001031" target="_blank" rel="noopener noreferrer">Circulation</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Cómo prevenir las enfermedades del corazón, en español — <a href="https://medlineplus.gov/spanish/howtopreventheartdisease.html" target="_blank" rel="noopener noreferrer">MedlinePlus</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Embarazo</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía clínica</span> <b>ACOG</b> — 2013 (reafirmado) — Weight Gain During Pregnancy (Committee Opinion 548): la ganancia de peso gestacional se interpreta según el IMC previo al embarazo y con seguimiento profesional — <a href="https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2013/01/weight-gain-during-pregnancy" target="_blank" rel="noopener noreferrer">ACOG</a> · <a href="https://pubmed.ncbi.nlm.nih.gov/23262962/" target="_blank" rel="noopener noreferrer">PubMed 23262962</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>IOM / National Academies</b> — 2009 — Weight Gain During Pregnancy: Reexamining the Guidelines — <a href="https://www.nationalacademies.org/read/12584/chapter/2" target="_blank" rel="noopener noreferrer">National Academies</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2020 — Directrices de actividad física: incluyen recomendaciones para el embarazo y el posparto — <a href="https://www.who.int/publications/i/item/9789240015128/" target="_blank" rel="noopener noreferrer">WHO guidelines</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Lactancia</summary>
+<ul class="refs">
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS / UNICEF</b> — 2023 — Alimentación del lactante y del niño pequeño: apoyo a la lactancia y nutrición materna — <a href="https://www.who.int/es/news-room/fact-sheets/detail/infant-and-young-child-feeding" target="_blank" rel="noopener noreferrer">OMS (español)</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>EFSA</b> — 2010 — Durante la lactancia la ingesta adecuada de agua total aumenta unos 700 mL/día respecto a mujeres no lactantes — <a href="https://www.efsa.europa.eu/en/press/news/nda100326" target="_blank" rel="noopener noreferrer">EFSA dietary reference values</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Enfermedad renal</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía clínica</span> <b>KDIGO</b> — 2024 — Clinical Practice Guideline for the Evaluation and Management of Chronic Kidney Disease: la nutrición se individualiza según estadio y contexto clínico — <a href="https://kdigo.org/guidelines/ckd-evaluation-and-management/kdigo-2024-ckd-guideline/" target="_blank" rel="noopener noreferrer">KDIGO</a></li>
+<li><span class="rtype">📘 Guía clínica</span> <b>Stevens et al. (KDIGO)</b> — 2024 — KDIGO 2024 CKD Guideline (Kidney International) — <a href="https://pubmed.ncbi.nlm.nih.gov/38490803/" target="_blank" rel="noopener noreferrer">PubMed 38490803</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Adulto mayor</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía / posición</span> <b>ESPEN Expert Group (Deutz et al.)</b> — 2014 — Protein intake and exercise for optimal muscle function with aging — <a href="https://pubmed.ncbi.nlm.nih.gov/24814383/" target="_blank" rel="noopener noreferrer">PubMed 24814383</a></li>
+<li><span class="rtype">📘 Guía / posición</span> <b>PROT-AGE Study Group (Bauer et al.)</b> — 2013 — Evidence-based recommendations for optimal dietary protein intake in older people — <a href="https://www.sciencedirect.com/science/article/pii/S1525861013003265" target="_blank" rel="noopener noreferrer">JAMDA</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2020 — Directrices de actividad física: en adultos mayores se priorizan equilibrio, fuerza y funcionalidad — <a href="https://www.who.int/publications/i/item/9789240015128/" target="_blank" rel="noopener noreferrer">WHO guidelines</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Hiperuricemia y gota</summary>
+<ul class="refs">
+<li><span class="rtype">📘 Guía clínica</span> <b>ACR (FitzGerald et al.)</b> — 2020 — Guideline for the Management of Gout: limitar alcohol, fructosa y exceso de purinas animales; la dieta no sustituye al tratamiento — <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC10563586/" target="_blank" rel="noopener noreferrer">PMC</a></li>
+<li><span class="rtype">📄 Estudio</span> <b>Choi et al.</b> — 2004 — Purine-rich foods, dairy and protein intake, and the risk of gout in men (NEJM): las purinas vegetales no se asociaron a mayor riesgo — <a href="https://pubmed.ncbi.nlm.nih.gov/15014182/" target="_blank" rel="noopener noreferrer">PubMed 15014182</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Salud gastrointestinal</summary>
+<ul class="refs">
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Enfermedades del sistema digestivo: gastritis, reflujo, dispepsia, úlcera, intestino irritable y enfermedad inflamatoria intestinal no son equivalentes; incluye señales para consultar al médico — <a href="https://medlineplus.gov/spanish/digestivediseases.html" target="_blank" rel="noopener noreferrer">MedlinePlus (español)</a></li>
+</ul>
+</details>
+
+<details class="ev">
+<summary>Por qué registrar el peso y los hábitos (contexto de la app)</summary>
+<ul class="refs">
+<li><span class="rtype">📄 Estudio</span> <b>JABFM</b> — 2009 — Estudio en 2330 pacientes de atención primaria con sobrepeso u obesidad: registrar el peso en la historia clínica se asociaba a más consejo profesional (OR hasta 7,2) y las comorbilidades a más manejo (OR 1,2-4,8); menos del 25 % recibía derivación a nutrición — <a href="https://www.jabfm.org/content/22/5/544" target="_blank" rel="noopener noreferrer">Artículo completo (JABFM)</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>MedlinePlus (NIH)</b> — Lectura ciudadana en español: <a href="https://medlineplus.gov/spanish/ency/article/007297.htm" target="_blank" rel="noopener noreferrer">Obesidad</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000348.htm" target="_blank" rel="noopener noreferrer">Riesgos de la obesidad</a> · <a href="https://medlineplus.gov/spanish/howtopreventdiabetes.html" target="_blank" rel="noopener noreferrer">Cómo prevenir la diabetes</a> · <a href="https://medlineplus.gov/spanish/ency/patientinstructions/000101.htm" target="_blank" rel="noopener noreferrer">Control de la hipertensión</a></li>
+</ul>
+</details>
 </section>
 
-<section id="seg" class="card" hidden>
+<section id="seg" class="card" hidden role="tabpanel" aria-labelledby="tab-seg" tabindex="0">
 <h2>Mi seguimiento</h2>
+<p class="note purple">Tus registros se guardan localmente en este navegador y no se envían a ningún servidor.</p>
 <div class="grid grid3">
-<div><label>Peso hoy (kg)</label><input id="wHoy" type="number" step="0.1"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
-<div><label>Pasos hoy (meta 10.000)</label><input id="pHoy" type="number"><button id="btnP" class="btn-pasos" style="margin-top:8px">Guardar registro</button></div>
-<div><label>Vasos agua hoy (meta 8)</label><input id="aHoy" type="number" min="0" max="12"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
+<div><label for="wHoy">Peso hoy (kg)</label><input id="wHoy" type="number" step="0.1" inputmode="decimal"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
+<div><label for="pHoy">Pasos hoy</label><input id="pHoy" type="number" min="0" inputmode="numeric"><button id="btnP" class="btn-pasos" style="margin-top:8px">Guardar registro</button></div>
+<div><label for="aHoy">Vasos de agua hoy</label><input id="aHoy" type="number" min="0" max="30" inputmode="numeric"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
 </div>
+<p class="note">Pasos y agua se registran como hábito personal. <strong>10.000 pasos y 8 vasos son solo referencias visuales</strong>: los beneficios del movimiento empiezan con cantidades menores y las necesidades de líquidos varían según cuerpo, clima, actividad, alimentación y situación clínica.</p>
 <p class="chart-wrap"><canvas id="evol" width="800" height="220"></canvas><span id="chartTip" class="tip-chart"></span><br>
-<small class="mut">🟢 peso · 🟡 pasos (10.000) · 🔵 vasos (8) · un valor por día (si guardás de nuevo, se actualiza el de hoy)</small></p>
+<small class="mut">🟢 peso · 🟡 pasos · 🔵 vasos · un valor por día (si guardás de nuevo, se actualiza el de hoy). La línea discontinua marca la referencia visual actual (10.000 pasos / 8 vasos), no un requisito universal.</small></p>
 <div id="log"></div>
 </section>
 
@@ -126,55 +270,189 @@ footer{color:#8b96ad;font-size:.8rem;margin-top:20px}
 <h2>Apoyar el proyecto</h2>
 <p>¿Te gustó el proyecto? Si quieres colaborar voluntariamente, puedes invitarme a un cafecito o mate.</p>
 <p>
-<a class="ko" href="https://ko-fi.com/martinmartinezgarcia" target="_blank" rel="noopener">☕ Ko-fi</a>
-<a class="pp" href="https://www.paypal.com/paypalme/blufferedtwitch" target="_blank" rel="noopener">💙 PayPal</a>
-<a class="st" href="https://starlink.com/es?referral=RC-DF-5848974-78640-68&app_source=share" target="_blank" rel="noopener">🛰️ Internet satelital Starlink</a>
+<a class="ko" href="https://ko-fi.com/martinmartinezgarcia" target="_blank" rel="noopener noreferrer">☕ Ko-fi</a>
+<a class="pp" href="https://www.paypal.com/paypalme/blufferedtwitch" target="_blank" rel="noopener noreferrer">💙 PayPal</a>
+<a class="st" href="https://starlink.com/es?referral=RC-DF-5848974-78640-68&app_source=share" target="_blank" rel="noopener noreferrer">🛰️ Internet satelital Starlink</a>
 </p>
 <small class="mut">El enlace de Starlink es de afiliado; puede ofrecerte el primer mes según las condiciones vigentes de Starlink.</small>
 </section>
 
-<footer>Información educativa basada en las fuentes citadas; no reemplaza la consulta médica.</footer>
+<footer>
+<p>Información educativa basada en las fuentes citadas. No realiza diagnósticos ni sustituye la valoración de profesionales de la salud.</p>
+<p>Herramienta para personas adultas (18+). No está adaptada para evaluar peso, IMC o crecimiento en niños y adolescentes.</p>
+<p>Los registros de seguimiento se guardan localmente en este navegador y no se envían a ningún servidor.</p>
+</footer>
 </div>
 <script>
+// Helpers
 const $=id=>document.getElementById(id);
-document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));b.classList.add('on');['calc','hab','ev','seg'].forEach(i=>$(i).hidden=i!==b.dataset.t)});
+
+// Tabs
+const tabs=[...document.querySelectorAll('.tab')];
+function selectTab(t){
+ tabs.forEach(x=>{
+  const on=x===t;
+  x.classList.toggle('on',on);
+  x.setAttribute('aria-selected',on?'true':'false');
+  x.tabIndex=on?0:-1;
+  $(x.dataset.t).hidden=!on;
+ });
+}
+tabs.forEach((t,i)=>{
+ t.addEventListener('click',()=>selectTab(t));
+ t.addEventListener('keydown',e=>{
+  let n=null;
+  if(e.key==='ArrowRight'||e.key==='ArrowDown')n=tabs[(i+1)%tabs.length];
+  else if(e.key==='ArrowLeft'||e.key==='ArrowUp')n=tabs[(i-1+tabs.length)%tabs.length];
+  else if(e.key==='Home')n=tabs[0];
+  else if(e.key==='End')n=tabs[tabs.length-1];
+  if(n){e.preventDefault();selectTab(n);n.focus();}
+ });
+});
+
+// Ambient UI
 $('btnThink').onclick=()=>{const c=$('calc');c.classList.add('think');setTimeout(()=>c.classList.remove('think'),1800)};
 function amb(cat){const a={n:['#34A853','#4285F4'],s:['#FBBC05','#FBBC05'],l:['#EA4335','#FBBC05'],m:['#EA4335','#EA4335']}[cat]||['#4285F4','#34A853'];$('b1').style.background=a[0];$('b2').style.background=a[1];}
 function updAmb(){ $('ambient').style.setProperty('--int',$('rInt').value/100);$('ambient').style.setProperty('--blur',$('rBlur').value+'px');const s=$('rSpr').value/100;$('ambient').style.transform=`scale(${0.7+s*0.5})`;}
 ['rInt','rBlur','rSpr'].forEach(id=>$(id).oninput=updAmb);updAmb();
 
-function getCom(){return{diab:$('cDiab').checked,lip:$('cLip').checked,hta:$('cHta').checked,cvd:$('cCvd').checked};}
-
-function renderTips(){
-const com=getCom(),T=[];
-T.push({cls:'g',t:'🥗 Base para todos',ul:['Plato: ½ verduras, ¼ proteína magra, ¼ cereal integral.','Bebidas azucaradas → agua.','150 min/sem de actividad moderada + 2 de fuerza.','Dormir 7-9 h.']});
-if(com.diab)T.push({cls:'d',t:'🩸 Diabetes',ul:['Perder 4.5 kg ya ayuda a controlar la glucosa.','Distribuye carbohidratos en el día; prioriza fibra.','Camina 10-15 min después de comer.'],link:['https://medlineplus.gov/spanish/diabetestype2.html','MedlinePlus: Diabetes tipo 2']});
-if(com.lip)T.push({cls:'c',t:'💛 Colesterol alto',ul:['Menos grasas saturadas y trans; más avena, legumbres, frutos secos.','Pescado 2 veces por semana.'],link:['https://medlineplus.gov/spanish/cholesterol.html','MedlinePlus: Colesterol']});
-if(com.hta)T.push({cls:'h',t:'🧂 Hipertensión',ul:['Dieta DASH: frutas, verduras, lácteos bajos en grasa.','Reduce la sal; cocina con hierbas y limón.','Alcohol: máx. 1 trago/día mujeres, 2 hombres.'],link:['https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm','MedlinePlus: Dieta DASH']});
-if(com.cvd)T.push({cls:'v',t:'❤️ Enfermedad cardiovascular',ul:['Controla presión, colesterol y peso con tu médico.','Actividad física regular adaptada a tu condición.','No fumes; el tabaco multiplica el riesgo.'],link:['https://medlineplus.gov/spanish/howtopreventheartdisease.html','MedlinePlus: Prevenir enf. del corazón']});
-T.push({cls:'g',t:'🩺 Habla con tu médico',ul:['Pide que registren tu IMC y un plan de dieta y ejercicio.','Pregunta por derivación a nutrición si tu IMC ≥ 30.'],link:['https://medlineplus.gov/spanish/ency/article/007297.htm','MedlinePlus: Obesidad']});
-$('tips').innerHTML=T.map(x=>`<div class="tip ${x.cls}"><h4>${x.t}</h4><ul>${x.ul.map(u=>`<li>${u}</li>`).join('')}</ul>${x.link?`<a href="${x.link[0]}" target="_blank" rel="noopener">${x.link[1]} →</a>`:''}</div>`).join('');
+// Clinical conditions
+const conditionIds=['cDiab','cLip','cHta','cCvd','cPreg','cLact','cRenal','cMayor','cGota','cGastrica'];
+const condOrder=['diab','lip','hta','cvd','preg','lact','renal','mayor','gota','gastrica'];
+function getCom(){
+ return{diab:$('cDiab').checked,lip:$('cLip').checked,hta:$('cHta').checked,cvd:$('cCvd').checked,
+ preg:$('cPreg').checked,lact:$('cLact').checked,renal:$('cRenal').checked,mayor:$('cMayor').checked,
+ gota:$('cGota').checked,gastrica:$('cGastrica').checked};
 }
 
+// Evidence / tips
+const conditionInfo={
+ diab:{cls:'d',title:'🩸 Diabetes',tips:[
+  'Patrón alimentario variado con fibra (verduras, legumbres, cereales integrales) y carbohidratos repartidos a lo largo del día.',
+  'Moverse un poco después de las comidas, por ejemplo caminar 10-15 minutos, puede ayudar a moderar la glucosa después de comer.',
+  'Las guías actuales (ADA) apoyan que, cuando hay indicación, las reducciones moderadas de peso (objetivos usuales de 3-7%) mejoran el control glucémico: defínelas con un profesional.'
+ ],link:['https://medlineplus.gov/spanish/diabetestype2.html','MedlinePlus: Diabetes tipo 2']},
+ lip:{cls:'c',title:'💛 Colesterol alto',tips:[
+  'Reduce las grasas saturadas y evita las trans: prioriza aceites vegetales, frutos secos, legumbres y pescado.',
+  'La avena, la legumbre y otros alimentos ricos en fibra ayudan a mejorar el perfil de lípidos.',
+  'El pescado de forma regular se incluye en los patrones dietéticos cardioprotectores.'
+ ],link:['https://medlineplus.gov/spanish/cholesterol.html','MedlinePlus: Colesterol']},
+ hta:{cls:'h',title:'🧂 Hipertensión',tips:[
+  'El patrón DASH (frutas, verduras, lácteos bajos en grasa, legumbres) y cocinar con poca sal ayudan a controlar la presión arterial.',
+  'Cualquier reducción de sal cuenta; la mayor parte del sodio proviene de productos procesados y comidas preparadas.',
+  'Sobre alcohol: quien no consume alcohol no necesita empezar; si se consume, menos es más seguro (OMS).'
+ ],link:['https://medlineplus.gov/spanish/ency/patientinstructions/000770.htm','MedlinePlus: Dieta DASH']},
+ cvd:{cls:'v',title:'❤️ Enfermedad cardiovascular',tips:[
+  'El seguimiento de presión, colesterol y hábitos con tu equipo de salud forma parte del cuidado.',
+  'La actividad física regular, adaptada a tu situación clínica, es beneficiosa.',
+  'No fumar: el tabaco aumenta de forma importante el riesgo cardiovascular.'
+ ],link:['https://medlineplus.gov/spanish/howtopreventheartdisease.html','MedlinePlus: Prevenir enf. del corazón']},
+ preg:{cls:'p',title:'🤰 Embarazo',tips:[
+  'Durante el embarazo, el peso y su evolución requieren una interpretación específica: el IMC calculado con el peso actual no debe utilizarse aisladamente para valorar el aumento gestacional. Consulta con tu equipo de salud.',
+  'La ganancia de peso gestacional se interpreta según el peso previo al embarazo y con seguimiento prenatal.',
+  'Una alimentación variada y suficiente es la base; los suplementos (hierro, ácido fólico u otros) se indican de forma personalizada por el equipo de salud, no por esta herramienta.',
+  'La actividad física moderada, como caminar, suele ser beneficiosa si no existe contraindicación.',
+  'No se recomienda perder peso de forma deliberada durante el embarazo.'
+ ],link:['https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2013/01/weight-gain-during-pregnancy','ACOG: Weight gain during pregnancy']},
+ lact:{cls:'t',title:'🍼 Lactancia',tips:[
+  'Una alimentación variada y suficiente ayuda a mantener la lactancia; no se recomiendan dietas extremadamente restrictivas.',
+  'La hidratación según la sed y las necesidades; las necesidades de líquidos aumentan durante la lactancia.',
+  'La recuperación física es progresiva: la actividad puede reiniciarse de forma gradual según cómo te sientas.',
+  'Las promesas de pérdida rápida de peso no son recomendables; si te preocupa tu peso o tu alimentación, consulta con un profesional.'
+ ],link:['https://www.who.int/es/news-room/fact-sheets/detail/infant-and-young-child-feeding','OMS: Alimentación del lactante']},
+ renal:{cls:'k',title:'🫘 Enfermedad renal',tips:[
+  'Las recomendaciones nutricionales en enfermedad renal dependen del estadio, la función renal, el laboratorio, la medicación y la presencia de diálisis: no existe una "dieta renal" válida para todas las personas.',
+  'El sodio, el potasio, el fósforo, las proteínas y los líquidos pueden necesitar ajustes individuales; no conviene fijarlos por cuenta propia.',
+  'En esta situación, las metas de bebida y las restricciones de alimentos deben acordarse con el equipo de salud.',
+  'El seguimiento con médico y nutricionista o dietista es especialmente importante.'
+ ],link:['https://kdigo.org/guidelines/ckd-evaluation-and-management/kdigo-2024-ckd-guideline/','KDIGO 2024: guía de enfermedad renal crónica']},
+ mayor:{cls:'m',title:'🧓 Adulto mayor',tips:[
+  '"Adulto mayor" depende del contexto y no es una categoría diagnóstica rígida.',
+  'Mantener la masa muscular, la fuerza y la funcionalidad importa tanto o más que el número en la báscula.',
+  'La actividad física adaptada (fuerza, equilibrio, caminar) ayuda a conservar autonomía y prevenir caídas.',
+  'Una ingesta proteica adecuada y una alimentación densa en nutrientes ayudan a prevenir la desnutrición; las guías (ESPEN/PROT-AGE) sitúan las necesidades algo por encima de las del adulto joven, pero la cantidad concreta conviene individualizarla.',
+  'El IMC tiene limitaciones con la edad: se interpreta junto con composición corporal, funcionalidad y pérdida de peso involuntaria. Menos peso no siempre es más salud.'
+ ],link:['https://pubmed.ncbi.nlm.nih.gov/24814383/','ESPEN: proteína y ejercicio en el envejecimiento']},
+ gota:{cls:'u',title:'🟣 Hiperuricemia / gota',tips:[
+  'La hiperuricemia (ácido úrico elevado) no es lo mismo que la gota clínica: el abordaje depende de cada situación.',
+  'Limitar el alcohol y las bebidas azucaradas con fructosa ayuda a reducir el ácido úrico.',
+  'El exceso de carne y marisco se asocia a más riesgo; las purinas de origen vegetal no se asocian a mayor riesgo de gota y los lácteos desnatados se asocian a menor riesgo.',
+  'No hace falta prohibir grupos enteros de alimentos: las listas extremas de "prohibidos" suelen ser innecesarias.',
+  'La dieta no reemplaza el tratamiento médico: no suspendas medicamentos (por ejemplo, alopurinol) sin indicación profesional.'
+ ],link:['https://pmc.ncbi.nlm.nih.gov/articles/PMC10563586/','ACR 2020: guía de manejo de la gota']},
+ gastrica:{cls:'s',title:'🍽️ Patología gástrica / gastrointestinal',tips:[
+  'Gastritis, reflujo, dispepsia, enfermedad ulcerosa, intestino irritable y enfermedad inflamatoria intestinal no son equivalentes: no existe una única dieta terapéutica común a todas.',
+  'Conviene observar tu tolerancia individual y evitar restricciones innecesarias que dejen la alimentación incompleta.',
+  'Anotar alimentos y síntomas puede ayudar a identificar patrones; revisa el registro con tu profesional.',
+  'Consulta con tu equipo de salud si los síntomas persisten o empeoran.'
+ ],link:['https://medlineplus.gov/spanish/digestivediseases.html','MedlinePlus: Enfermedades del sistema digestivo']}
+};
+function renderTips(){
+ const com=getCom(),T=[];
+ T.push({cls:'g',t:'🥗 Base para todos',ul:[
+  'Una guía práctica para el plato: aproximadamente media porción de verduras, un cuarto de proteína y un cuarto de cereal integral.',
+  'El agua como bebida principal; las bebidas azucaradas conviene dejarlas para ocasiones especiales.',
+  'Actividad física: las guías (OMS) proponen 150-300 min semanales de actividad moderada y ejercicios de fuerza 2 o más días; si hoy haces poco, algo de actividad ya es mejor que nada.',
+  'Dormir 7 o más horas de forma regular ayuda a la salud (muchos adultos se benefician con 7-9 horas).',
+  'Priorizar alimentos poco procesados y cocinar con poca sal.'
+ ]});
+ condOrder.forEach(k=>{
+  if(com[k]){const c=conditionInfo[k];T.push({cls:c.cls,t:c.title,ul:c.tips,link:c.link});}
+ });
+ const n=condOrder.filter(k=>com[k]).length;
+ if(com.renal&&n>1)T.push({cls:'x',t:'⚖️ Cuándo individualizar',ul:[
+  'Al combinar varias situaciones, recomendaciones como líquidos, proteínas, sodio, potasio, fósforo o pérdida de peso pueden necesitar ajustes: consúltalo con tu equipo de salud.'
+ ]});
+ T.push({cls:'g',t:'🩺 Habla con tu equipo de salud',ul:[
+  'Si buscas modificar tu peso, una evaluación profesional puede ayudarte a definir un objetivo apropiado según tu situación de salud.',
+  'Un nutricionista o dietista puede adaptar estas ideas a tu contexto, cultura y preferencias.',
+  'Esta herramienta ofrece información educativa general: no diagnostica ni sustituye la valoración profesional.'
+ ],link:['https://medlineplus.gov/spanish/ency/article/007297.htm','MedlinePlus: Obesidad']});
+ $('tips').innerHTML=T.map(x=>`<div class="tip ${x.cls}"><h4>${x.t}</h4><ul>${x.ul.map(u=>`<li>${u}</li>`).join('')}</ul>${x.link?`<a href="${x.link[0]}" target="_blank" rel="noopener noreferrer">${x.link[1]} →</a>`:''}</div>`).join('');
+}
+
+// BMI calculator
 function calc(){
-const p=+$('peso').value,h=+$('alt').value;if(!p||!h)return;const imc=p/(h*h);let cat,cls,txt;
-if(imc<18.5){cat='n';cls='c-green';txt='Bajo peso';}
-else if(imc<25){cat='n';cls='c-green';txt='Normopeso';}
-else if(imc<30){cat='s';cls='c-yellow';txt='Sobrepeso';}
-else if(imc<35){cat='l';cls='c-orange';txt='Obesidad leve';}
-else{cat='m';cls='c-red';txt='Obesidad moderada/severa';}
-amb(cat);
-const com=Object.values(getCom()).filter(Boolean).length;
-$('res').innerHTML=`<div class="badge ${cls}">IMC ${imc.toFixed(1)} · ${txt}</div>
-<div class="bar"><i style="width:${Math.min(100,imc/40*100)}%"></i></div>
-<p>${imc>=25?`Meta inicial realista: perder 5-10% de tu peso (${(p*0.05).toFixed(1)}-${(p*0.10).toFixed(1)} kg).`:'Mantén tus hábitos actuales.'}
-${com>0?`<br>${com} condición(es) marcada(s): mira la pestaña <b>Hábitos y consejos</b> para recomendaciones adaptadas.`:`Marca condiciones arriba para ver consejos adaptados en <b>Hábitos y consejos</b>.`}</p>`;
-renderTips();}
+ const p=parseFloat($('peso').value),h=parseFloat($('alt').value);
+ if(!isFinite(p)||!isFinite(h)||p<30||p>300||h<1||h>2.3){
+  $('res').innerHTML='<p class="err">Revisa el peso y la altura ingresados.</p>';
+  return;
+ }
+ const imc=p/(h*h);
+ let cat,cls,txt;
+ if(imc<18.5){cat='n';cls='c-green';txt='Bajo peso';}
+ else if(imc<25){cat='n';cls='c-green';txt='Rango de peso saludable';}
+ else if(imc<30){cat='s';cls='c-yellow';txt='Sobrepeso';}
+ else if(imc<35){cat='l';cls='c-orange';txt='Obesidad clase I';}
+ else if(imc<40){cat='m';cls='c-orange';txt='Obesidad clase II';}
+ else{cat='m';cls='c-red';txt='Obesidad clase III';}
+ amb(cat);
+ const com=getCom();
+ const n=condOrder.filter(k=>com[k]).length;
+ let msg,warn='';
+ if(com.preg){
+  warn='<p class="note warn"><strong>La interpretación estándar del IMC con el peso actual no está diseñada para valorar la ganancia de peso durante el embarazo.</strong> Durante el embarazo, el peso y su evolución requieren una interpretación específica según el peso previo al embarazo. Consulta con tu equipo de salud.</p>';
+  msg='El valor se muestra solo como cálculo matemático de referencia; no describe tu situación gestacional.';
+ }else if(imc<18.5){
+  msg='Un IMC bajo también puede acompañarse de riesgos para la salud. Un profesional puede ayudarte a valorar tu situación.';
+ }else if(imc>=25){
+  msg='Si buscas modificar tu peso, una evaluación profesional puede ayudarte a definir un objetivo apropiado según tu situación de salud.';
+  if(com.lact||com.mayor||com.renal)msg+=' En la situación seleccionada, los objetivos relacionados con el peso deben contextualizarse con el equipo de salud.';
+ }else{
+  msg='El resultado se sitúa en el rango de peso saludable para adultos. Cuidar la alimentación, el movimiento y el sueño es útil a cualquier peso.';
+ }
+ $('res').innerHTML=`${warn}<div class="badge ${cls}">IMC ${imc.toFixed(1)} · ${txt}</div>
+ <div class="bar"><i style="width:${Math.min(100,imc/40*100)}%"></i></div>
+ <p>${msg}</p>
+ <small class="mut">El IMC es una herramienta de cribado poblacional y no describe por sí solo composición corporal ni estado de salud.</small>
+ <p>${n>0?`<strong>${n} condición(es) marcada(s):</strong> mira la pestaña <b>Hábitos y consejos</b> para recomendaciones adaptadas.`:`Marca condiciones arriba para ver consejos adaptados en <b>Hábitos y consejos</b>.`}</p>`;
+ renderTips();
+}
 $('btnCalc').onclick=calc;
-['cDiab','cLip','cHta','cCvd'].forEach(id=>$(id).onchange=()=>{renderTips();});
+conditionIds.forEach(id=>{ $(id).addEventListener('change',renderTips); });
 calc();
 
-// seguimiento diario
+// Tracking
 const META_P=10000,META_A=8,k='pesoAppV2',kOld='pesoAppV1';
 function iso(off=0){const t=new Date();t.setHours(12,0,0,0);t.setDate(t.getDate()+off);return t.toISOString().slice(0,10);}
 function migrate(raw){
@@ -197,6 +475,8 @@ function upsert(key,val){
  if(!e){e={date:t};d.hist.push(e);d.hist.sort((a,b)=>a.date.localeCompare(b.date));}
  e[key]=val;save();
 }
+
+// Chart
 let hits=[];
 function draw(){
  const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,220);hits=[];
@@ -208,7 +488,7 @@ function draw(){
  const pyKg=v=>190-(v-mn)/(mx-mn||1)*160;
  const pyPct=v=>190-Math.min(1.2,v)*160/1.2;
  x.strokeStyle='#2a3350';x.lineWidth=1;x.setLineDash([4,4]);x.beginPath();x.moveTo(20,pyPct(1));x.lineTo(790,pyPct(1));x.stroke();x.setLineDash([]);
- x.fillStyle='#8b96ad';x.font='10px system-ui';x.fillText('100% meta pasos/agua',32,pyPct(1)-4);
+ x.fillStyle='#8b96ad';x.font='10px system-ui';x.fillText('100% referencia pasos/agua',32,pyPct(1)-4);
  function line(key,col,yOf,label,fmt){
   const pts=h.map((e,i)=>e[key]==null?null:{i,e,y:yOf(e[key])}).filter(Boolean);
   x.strokeStyle=col;x.lineWidth=2.5;x.beginPath();
