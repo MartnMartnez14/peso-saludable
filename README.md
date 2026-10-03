@@ -22,7 +22,7 @@ También funciona sin internet: descarga el archivo `index.html` y ábrelo en el
 
 ![Mi seguimiento](docs/images/seguimiento.png)
 
-> Nota: las capturas corresponden a una versión anterior de la interfaz y deben actualizarse manualmente.
+> Las capturas corresponden a la primera versión de la interfaz. Las actualizaremos más adelante.
 
 ## Qué incluye
 
