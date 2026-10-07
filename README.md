@@ -16,13 +16,13 @@ También funciona sin internet: descarga el archivo `index.html` y ábrelo en el
 
 **Consejos adaptados** (por ejemplo, si marcas diabetes)
 
-![Hábitos y consejos](docs/images/habitos.png)
+![Consejos](docs/images/habitos.png)
 
 **Seguimiento** con gráfica de peso, pasos y agua
 
 ![Mi seguimiento](docs/images/seguimiento.png)
 
-> Las capturas corresponden a la primera versión de la interfaz. Las actualizaremos más adelante.
+> Las capturas corresponden a versiones anteriores de la interfaz (la pestaña de consejos se llama ahora "Consejos" y se añadió "Hábitos"). Las actualizaremos más adelante.
 
 ## Qué incluye
 
@@ -30,6 +30,7 @@ También funciona sin internet: descarga el archivo `index.html` y ábrelo en el
 - Consejos educativos generales y adaptados según las situaciones que marques.
 - Pestaña de evidencia con guías y publicaciones científicas verificadas (OMS, ADA, AHA/ACC, ACOG, KDIGO, ESPEN, ACR, EFSA, MedlinePlus…), organizadas por temas y con indicación del tipo de fuente.
 - Seguimiento de peso, pasos y agua, guardado en el navegador (`localStorage`), con gráfica de los últimos 30 registros.
+- Pestaña **Hábitos**: registro diario en minutos de lectura de libros, meditación, actividades artísticas y recreación, con gráfica comparativa (misma escala de minutos), resumen por día y totales del período visible. Incluye una nota educativa sobre ocio y pantallas (OMS, CIE-11, AASM) sin lenguaje estigmatizante.
 - Fondo ambient con paleta azul / rojo / amarillo / verde, estrella animada y controles de intensidad, blur y spread.
 - Funcionamiento online (GitHub Pages) y offline (archivo único).
 
@@ -56,6 +57,7 @@ Puedes marcar estas situaciones para ver bloques educativos específicos (no son
 
 - No existe servidor de datos, cuentas, cookies, analítica ni telemetría.
 - El seguimiento de peso, pasos y agua se guarda únicamente en el `localStorage` del navegador (`pesoAppV2`, con migración desde `pesoAppV1`).
+- Los hábitos (lectura, meditación, arte y recreación) se guardan en el **mismo registro diario** de `pesoAppV2`, como campos adicionales por día. Es un cambio aditivo: no requiere migración y conserva intactos los registros previos de peso, pasos y agua.
 - Las casillas de condiciones no se guardan entre sesiones.
 - Nada de lo que registres se envía a ningún servidor.
 

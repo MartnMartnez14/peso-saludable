@@ -26,7 +26,7 @@ h1{margin:.2em 0;font-size:clamp(1.35rem,4.2vw,2rem);text-wrap:balance}
 .card::before{content:"";position:absolute;inset:-2px;border-radius:20px;z-index:-1;background:conic-gradient(from var(--angle),#4285F4,#9b72cb,#EA4335,#FBBC05,#34A853,#4285F4);animation:spin 8s linear infinite;filter:blur(1px);opacity:.9}
 .card::after{content:"";position:absolute;inset:0;border-radius:18px;background:#111624;z-index:-1}
 .card.think::before{filter:blur(14px);opacity:.7;animation:spin 2.2s linear infinite}
-.grid{display:grid;gap:12px}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr 1fr}}
+.grid{display:grid;gap:12px}@media(min-width:480px){.grid4{grid-template-columns:1fr 1fr}}@media(min-width:760px){.grid2{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr 1fr}.grid4{grid-template-columns:repeat(4,1fr)}}
 label{font-size:.85rem;color:#aab4c7}input,select{width:100%;padding:10px;border-radius:10px;border:1px solid #2a3350;background:#0e1322;color:#fff;font-size:1rem}
 button{background:linear-gradient(90deg,#4285F4,#34A853);border:0;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
 button.btn-pasos{background:linear-gradient(90deg,#FBBC05,#EA4335)}
@@ -40,13 +40,13 @@ button.btn-agua{background:linear-gradient(90deg,#4285F4,#9b72cb)}
 .tab:hover{border-color:var(--acc);box-shadow:0 0 12px -2px var(--acc);color:#fff}
 .tab:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
 .tab.on{background:color-mix(in srgb,var(--acc) 22%,#131a2c);border-color:var(--acc);color:#fff;font-weight:800;box-shadow:0 0 16px -4px var(--acc)}
-.tab.t-calc{--acc:#34A853}.tab.t-hab{--acc:#4285F4}.tab.t-ev{--acc:#FBBC05}.tab.t-seg{--acc:#9b72cb}
+.tab.t-calc{--acc:#34A853}.tab.t-con{--acc:#4285F4}.tab.t-ev{--acc:#FBBC05}.tab.t-seg{--acc:#9b72cb}.tab.t-habd{--acc:#EA4335}
 .badge{display:inline-block;padding:4px 12px;border-radius:999px;font-weight:700;margin:6px 0}
 .c-green{background:#123f2a;color:#5ff09a}.c-yellow{background:#4a3a10;color:#ffd54d}.c-orange{background:#4d2410;color:#ff9d5c}.c-red{background:#4d1414;color:#ff7a7a}
 .bar{height:10px;background:#222a45;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:conic-gradient(from 0deg,#4285F4,#EA4335,#FBBC05,#34A853);transition:width .6s}
 small.mut{color:#8b96ad}ul{line-height:1.55;margin:.4em 0;padding-left:1.2em}li{margin:.25em 0}a{color:#8ab4ff}
 .ctrl{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:#aab4c7}.ctrl input{width:130px;padding:0}
-canvas#evol{width:100%;height:220px;background:#0e1322;border:1px solid #2a3350;border-radius:12px;cursor:crosshair}
+canvas.chart{width:100%;height:220px;background:#0e1322;border:1px solid #2a3350;border-radius:12px;cursor:crosshair;touch-action:pan-y}.grid4 input,.grid4 button{min-height:44px}
 .tip-chart{position:absolute;pointer-events:none;background:#111624;border:1px solid #2a3350;border-radius:8px;padding:6px 10px;font-size:.8rem;display:none;z-index:2;white-space:nowrap}
 .chart-wrap{position:relative}
 .checks{display:grid;gap:8px;grid-template-columns:1fr}
@@ -95,9 +95,10 @@ footer p{margin:.4em 0}
 
 <div class="tabs" role="tablist" aria-label="Secciones de la aplicación">
 <button class="tab t-calc on" role="tab" id="tab-calc" aria-selected="true" aria-controls="calc" data-t="calc">Calculadora</button>
-<button class="tab t-hab" role="tab" id="tab-hab" aria-selected="false" aria-controls="hab" data-t="hab" tabindex="-1">Hábitos y consejos</button>
+<button class="tab t-con" role="tab" id="tab-hab" aria-selected="false" aria-controls="hab" data-t="hab" tabindex="-1">Consejos</button>
 <button class="tab t-ev" role="tab" id="tab-ev" aria-selected="false" aria-controls="ev" data-t="ev" tabindex="-1">Evidencia</button>
 <button class="tab t-seg" role="tab" id="tab-seg" aria-selected="false" aria-controls="seg" data-t="seg" tabindex="-1">Mi seguimiento</button>
+<button class="tab t-habd" role="tab" id="tab-habd" aria-selected="false" aria-controls="habd" data-t="habd" tabindex="-1">Hábitos</button>
 </div>
 
 <section id="calc" class="card" role="tabpanel" aria-labelledby="tab-calc" tabindex="0">
@@ -151,7 +152,8 @@ footer p{margin:.4em 0}
 <details class="ev">
 <summary>Hábitos y estilo de vida</summary>
 <ul class="refs">
-<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2020 — Directrices sobre actividad física y comportamiento sedentario: 150-300 min/sem de actividad moderada y fuerza 2 o más días — <a href="https://www.who.int/publications/i/item/9789240015128/" target="_blank" rel="noopener noreferrer">WHO guidelines</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2020 — Directrices sobre actividad física y comportamiento sedentario: 150-300 min/sem de actividad moderada y fuerza 2 o más días; limitar el tiempo sedentario y sin umbral universal de pantalla recreativa — <a href="https://www.who.int/publications/i/item/9789240015128/" target="_blank" rel="noopener noreferrer">WHO guidelines</a></li>
+<li><span class="rtype">🏛️ Organismo oficial</span> <b>OMS</b> — 2018-2019 — CIE-11: el "trastorno por videojuegos" (6C51) se define por deterioro funcional significativo, no por la cantidad de horas; para la mayoría el juego es un pasatiempo saludable — <a href="https://www.who.int/news-room/questions-and-answers/item/addictive-behaviours-gaming-disorder" target="_blank" rel="noopener noreferrer">OMS: trastorno por videojuegos</a></li>
 <li><span class="rtype">📘 Consenso</span> <b>AASM / Sleep Research Society</b> — 2015 — Adultos: dormir 7 o más horas por noche de forma regular — <a href="https://aasm.org/resources/pdf/adultsleepdurationconsensus.pdf" target="_blank" rel="noopener noreferrer">Consensus statement (PDF)</a></li>
 <li><span class="rtype">🏛️ Organismo oficial</span> <b>EFSA</b> — 2010 — Ingesta adecuada de agua total en adultos (2,0 L mujeres / 2,5 L hombres, incluye el agua de los alimentos): no hay una regla universal de "8 vasos" — <a href="https://www.efsa.europa.eu/en/press/news/nda100326" target="_blank" rel="noopener noreferrer">EFSA dietary reference values</a></li>
 <li><span class="rtype">🔬 Metaanálisis</span> <b>Paluch et al.</b> — 2022 — Pasos diarios y mortalidad (15 cohortes): los beneficios se observan por debajo de 10.000 pasos — <a href="https://www.thelancet.com/journals/lanpub/article/PIIS2468-2667(21)00302-9/fulltext" target="_blank" rel="noopener noreferrer">Lancet Public Health</a></li>
@@ -261,9 +263,25 @@ footer p{margin:.4em 0}
 <div><label for="aHoy">Vasos de agua hoy</label><input id="aHoy" type="number" min="0" max="30" inputmode="numeric"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
 </div>
 <p class="note">Pasos y agua se registran como hábito personal. <strong>10.000 pasos y 8 vasos son solo referencias visuales</strong>: los beneficios del movimiento empiezan con cantidades menores y las necesidades de líquidos varían según cuerpo, clima, actividad, alimentación y situación clínica.</p>
-<p class="chart-wrap"><canvas id="evol" width="800" height="220"></canvas><span id="chartTip" class="tip-chart"></span><br>
+<p class="chart-wrap"><canvas id="evol" class="chart" width="800" height="220" role="img" aria-label="Gráfica de evolución de peso, pasos y agua en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTip" class="tip-chart" aria-hidden="true"></span><br>
 <small class="mut">🟢 peso · 🟡 pasos · 🔵 vasos · un valor por día (si guardás de nuevo, se actualiza el de hoy). La línea discontinua marca la referencia visual actual (10.000 pasos / 8 vasos), no un requisito universal.</small></p>
 <div id="log"></div>
+</section>
+
+<section id="habd" class="card" hidden role="tabpanel" aria-labelledby="tab-habd" tabindex="0">
+<h2>Hábitos</h2>
+<p class="note purple">Tus registros se guardan localmente en este navegador y no se envían a ningún servidor.</p>
+<div class="grid grid4">
+<div><label for="habLec"><span aria-hidden="true">📚</span> Lectura de libros físicos (min)</label><input id="habLec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabLec" style="margin-top:8px" aria-label="Guardar registro de lectura de libros">Guardar registro</button></div>
+<div><label for="habMed"><span aria-hidden="true">🧘</span> Meditación (min)</label><input id="habMed" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabMed" style="margin-top:8px" aria-label="Guardar registro de meditación">Guardar registro</button></div>
+<div><label for="habArt"><span aria-hidden="true">🎨</span> Actividades artísticas (min)</label><input id="habArt" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabArt" style="margin-top:8px" aria-label="Guardar registro de actividades artísticas">Guardar registro</button></div>
+<div><label for="habRec"><span aria-hidden="true">🎮</span> Recreación (min)</label><input id="habRec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabRec" style="margin-top:8px" aria-label="Guardar registro de recreación">Guardar registro</button></div>
+</div>
+<p class="note blue"><strong>Registrar no es una meta a maximizar.</strong> Anotar tus minutos es descriptivo. La OMS señala que el videojuego es un pasatiempo saludable para la mayoría; el "trastorno por videojuegos" (CIE-11) afecta a una minoría y se define por el deterioro funcional, no por la cantidad de horas. La OMS 2020 recomienda limitar el tiempo sedentario y sustituirlo por actividad de cualquier intensidad, y la AASM recuerda cuidar las pantallas antes de dormir. Si el ocio desplaza el sueño, el movimiento o la vida social, conviene revisarlo con un profesional.</p>
+<p class="chart-wrap"><canvas id="evolHab" class="chart" width="800" height="220" role="img" aria-label="Gráfica de evolución de minutos diarios por hábito en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTipHab" class="tip-chart" aria-hidden="true"></span><br>
+<small class="mut"><span aria-hidden="true">🔵</span> lectura · <span aria-hidden="true">🟢</span> meditación · <span aria-hidden="true">🟡</span> arte · <span aria-hidden="true">🔴</span> recreación · un valor por día (si guardás de nuevo, se actualiza el de hoy). Cada categoría usa además un marcador y un trazo distintos.</small></p>
+<div id="habLog"></div>
+<p id="habLive" class="mut" role="status" style="min-height:1.2em"></p>
 </section>
 
 <section class="card don">
@@ -295,8 +313,9 @@ function selectTab(t){
   x.classList.toggle('on',on);
   x.setAttribute('aria-selected',on?'true':'false');
   x.tabIndex=on?0:-1;
-  $(x.dataset.t).hidden=!on;
- });
+   $(x.dataset.t).hidden=!on;
+  });
+ if(t.dataset.t==='habd'){loadHabInputs();requestAnimationFrame(drawHab);}
 }
 tabs.forEach((t,i)=>{
  t.addEventListener('click',()=>selectTab(t));
@@ -445,7 +464,7 @@ function calc(){
  <div class="bar"><i style="width:${Math.min(100,imc/40*100)}%"></i></div>
  <p>${msg}</p>
  <small class="mut">El IMC es una herramienta de cribado poblacional y no describe por sí solo composición corporal ni estado de salud.</small>
- <p>${n>0?`<strong>${n} condición(es) marcada(s):</strong> mira la pestaña <b>Hábitos y consejos</b> para recomendaciones adaptadas.`:`Marca condiciones arriba para ver consejos adaptados en <b>Hábitos y consejos</b>.`}</p>`;
+ <p>${n>0?`<strong>${n} condición(es) marcada(s):</strong> mira la pestaña <b>Consejos</b> para recomendaciones adaptadas.`:`Marca condiciones arriba para ver consejos adaptados en <b>Consejos</b>.`}</p>`;
  renderTips();
 }
 $('btnCalc').onclick=calc;
@@ -469,7 +488,7 @@ function migrate(raw){
  return {hist:Object.values(map).sort((a,b)=>a.date.localeCompare(b.date))};
 }
 let d=migrate(JSON.parse(localStorage.getItem(k)||localStorage.getItem(kOld)||'{}'));
-function save(){localStorage.setItem(k,JSON.stringify(d));draw();}
+function save(){localStorage.setItem(k,JSON.stringify(d));draw();drawHab();}
 function upsert(key,val){
  const t=iso();let e=d.hist.find(x=>x.date===t);
  if(!e){e={date:t};d.hist.push(e);d.hist.sort((a,b)=>a.date.localeCompare(b.date));}
@@ -480,7 +499,7 @@ function upsert(key,val){
 let hits=[];
 function draw(){
  const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,220);hits=[];
- const h=d.hist.slice(-30);
+ const h=d.hist.filter(e=>e.w!=null||e.p!=null||e.a!=null).slice(-30);
  if(!h.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guardá un registro diario para ver la gráfica.',20,110);$('log').innerHTML='';return;}
  const ws=h.map(e=>e.w).filter(v=>v!=null);
  const mn=ws.length?Math.min(...ws)-2:0,mx=ws.length?Math.max(...ws)+2:1;
@@ -503,7 +522,7 @@ function draw(){
  line('p','#FBBC05',v=>pyPct(v/META_P),'Pasos',v=>v.toLocaleString('es')+' / '+META_P.toLocaleString('es'));
  line('a','#4285F4',v=>pyPct(v/META_A),'Agua',v=>v+' / '+META_A+' vasos');
  const last=h[h.length-1];
- $('log').innerHTML=`<small class="mut">Hoy ${last.date}: peso ${last.w??'—'} kg · pasos ${last.p??'—'} · agua ${last.a??'—'} vasos · ${h.length} día(s)</small>`;
+ $('log').innerHTML=`<small class="mut">Último registro (${last.date}): peso ${last.w??'—'} kg · pasos ${last.p??'—'} · agua ${last.a??'—'} vasos · ${h.length} día(s)</small>`;
 }
 const tip=$('chartTip'),cv=$('evol');
 cv.onmousemove=ev=>{
@@ -516,10 +535,101 @@ cv.onmousemove=ev=>{
  tip.style.borderColor=best.col;tip.innerHTML=`<b style="color:${best.col}">${best.label}</b> · ${best.val}<br><span class="mut">${best.date}</span>`;
 };
 cv.onmouseleave=()=>{tip.style.display='none';};
+
+// Hábitos: registro diario en minutos
+const HAB_MAX=1440;
+const HAB=[
+ {key:'lec',input:'habLec',btn:'btnHabLec',col:'#4285F4',label:'📚 Lectura',short:'lectura',mark:'c',dash:[]},
+ {key:'med',input:'habMed',btn:'btnHabMed',col:'#34A853',label:'🧘 Meditación',short:'meditación',mark:'s',dash:[7,4]},
+ {key:'art',input:'habArt',btn:'btnHabArt',col:'#FBBC05',label:'🎨 Arte',short:'actividades artísticas',mark:'t',dash:[2,3]},
+ {key:'rec',input:'habRec',btn:'btnHabRec',col:'#EA4335',label:'🎮 Recreación',short:'recreación',mark:'d',dash:[10,3,2,3]}
+];
+let habHits=[];
+function habLive(msg){const el=$('habLive');if(el)el.textContent=msg;}
+function loadHabInputs(){
+ const t=iso(),e=d.hist.find(x=>x.date===t);
+ HAB.forEach(c=>{const el=$(c.input);if(el)el.value=(e&&e[c.key]!=null)?e[c.key]:'';});
+}
+function habMark(x,shape,cx,cy,col){
+ x.fillStyle=col;x.strokeStyle=col;x.shadowColor=col;x.shadowBlur=8;x.beginPath();
+ if(shape==='c')x.arc(cx,cy,4,0,7);
+ else if(shape==='s')x.rect(cx-3.5,cy-3.5,7,7);
+ else if(shape==='t'){x.moveTo(cx,cy-4.5);x.lineTo(cx+4,cy+3.5);x.lineTo(cx-4,cy+3.5);x.closePath();}
+ else{x.moveTo(cx,cy-4.5);x.lineTo(cx+4.5,cy);x.lineTo(cx,cy+4.5);x.lineTo(cx-4.5,cy);x.closePath();}
+ x.fill();x.shadowBlur=0;
+}
+function drawHab(){
+ const cvHab=$('evolHab');if(!cvHab)return;
+ habHits=[];
+ const h=d.hist.filter(e=>HAB.some(c=>e[c.key]!=null)).slice(-30);
+ const log=$('habLog');
+ if(!h.length){if(log)log.innerHTML='';}
+ else{
+  const last=h[h.length-1];
+  const resumen=HAB.map(c=>`${c.label}: ${last[c.key]!=null?last[c.key]+' min':'—'}`).join(' · ');
+  const totales=HAB.map(c=>`${c.label}: ${h.reduce((s,e)=>s+(e[c.key]||0),0)} min`).join(' · ');
+  if(log)log.innerHTML=`<small class="mut">Último día (${last.date}): ${resumen}</small><br><small class="mut">Totales del período visible (${h.length} registro${h.length===1?'':'s'}): ${totales}</small>`;
+ }
+ const W=cvHab.clientWidth;if(!W)return;
+ const H=220,dpr=window.devicePixelRatio||1;
+ cvHab.width=Math.round(W*dpr);cvHab.height=Math.round(H*dpr);cvHab.style.height=H+'px';
+ const x=cvHab.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
+ if(!h.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guardá un registro diario para ver la gráfica.',16,110);return;}
+ let mx=10;h.forEach(e=>HAB.forEach(c=>{if(e[c.key]!=null)mx=Math.max(mx,e[c.key]);}));
+ const L=40,R=12,T=16,B=28,pw=W-L-R,ph=H-T-B;
+ const px=i=>L+(h.length===1?pw/2:i/(h.length-1)*pw);
+ const py=v=>T+ph-(v/mx)*ph;
+ x.strokeStyle='#2a3350';x.fillStyle='#8b96ad';x.font='10px system-ui';
+ [0,0.5,1].forEach(f=>{const y=py(mx*f);x.setLineDash([3,3]);x.beginPath();x.moveTo(L,y);x.lineTo(L+pw,y);x.stroke();x.setLineDash([]);x.fillText(Math.round(mx*f)+' min',2,y+3);});
+ x.fillText(h[0].date,L,H-8);
+ if(h.length>1){const t2=h[h.length-1].date;x.fillText(t2,L+pw-x.measureText(t2).width,H-8);}
+ HAB.forEach(c=>{
+  const pts=h.map((e,i)=>e[c.key]==null?null:{i,e,v:e[c.key],y:py(e[c.key])}).filter(Boolean);
+  if(!pts.length)return;
+  x.strokeStyle=c.col;x.lineWidth=2.5;x.setLineDash(c.dash);x.beginPath();
+  pts.forEach((p,n)=>{if(n){const prev=pts[n-1];if(prev.i===p.i-1)x.lineTo(px(p.i),p.y);else x.moveTo(px(p.i),p.y);}else x.moveTo(px(p.i),p.y);});
+  x.stroke();x.setLineDash([]);
+  pts.forEach(p=>{habMark(x,c.mark,px(p.i),p.y,c.col);habHits.push({x:px(p.i),y:p.y,label:c.label,val:p.v+' min',date:p.e.date,col:c.col});});
+ });
+}
+HAB.forEach(c=>{
+ const b=$(c.btn);if(!b)return;
+ b.addEventListener('click',()=>{
+  const raw=$(c.input).value;
+  if(raw===''){habLive('Ingresá un valor para '+c.short+'.');return;}
+  const n=Math.round(Number(raw));
+  if(!Number.isFinite(n)||n<0||n>HAB_MAX){habLive('Valor inválido en '+c.short+' (0-'+HAB_MAX+' min).');return;}
+  upsert(c.key,n);
+  habLive('Guardado: '+c.short+' '+n+' min. Se actualizó el día de hoy.');
+ });
+});
+const cvHab=$('evolHab'),tipHab=$('chartTipHab');
+function showHabTip(clientX,clientY){
+ const r=cvHab.getBoundingClientRect();
+ const mx=clientX-r.left,my=clientY-r.top;
+ let best=null,bd=16;
+ habHits.forEach(hh=>{const dd=Math.hypot(hh.x-mx,hh.y-my);if(dd<bd){bd=dd;best=hh;}});
+ if(!best){tipHab.style.display='none';return;}
+ const group=habHits.filter(hh=>hh.date===best.date);
+ const wrap=cvHab.parentElement;
+ tipHab.style.display='block';
+ tipHab.style.borderColor=best.col;
+ tipHab.innerHTML=`<b class="mut">${best.date}</b>`+group.map(g=>`<br><b style="color:${g.col}">${g.label}</b> · ${g.val}`).join('');
+ const tw=tipHab.offsetWidth||120,ww=wrap.clientWidth;
+ let left=mx+12;if(left+tw>ww)left=mx-tw-12;if(left<0)left=0;
+ let top=my-40;if(top<0)top=my+16;
+ tipHab.style.left=left+'px';tipHab.style.top=top+'px';
+}
+if(cvHab){
+ cvHab.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;showHabTip(e.clientX,e.clientY);});
+ cvHab.addEventListener('pointerdown',e=>{showHabTip(e.clientX,e.clientY);});
+ cvHab.addEventListener('pointerleave',()=>{tipHab.style.display='none';});
+}
+window.addEventListener('resize',()=>{const s=$('habd');if(s&&!s.hidden)drawHab();});
 $('btnW').onclick=()=>{if($('wHoy').value) upsert('w',+$('wHoy').value);};
 $('btnP').onclick=()=>{if($('pHoy').value) upsert('p',+$('pHoy').value);};
 $('btnA').onclick=()=>{if($('aHoy').value!=='') upsert('a',+$('aHoy').value);};
-draw();
+draw();drawHab();
 </script>
 </body>
 </html>
