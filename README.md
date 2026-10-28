@@ -29,9 +29,10 @@ También funciona sin internet: descarga el archivo `index.html` y ábrelo en el
 - Calculadora de IMC para adultos, con clasificación no estigmatizante (bajo peso, rango de peso saludable, sobrepeso, obesidad clase I/II/III) y la aclaración de que el IMC es una herramienta de cribado poblacional, no un diagnóstico.
 - Consejos educativos generales y adaptados según las situaciones que marques.
 - Pestaña de evidencia con guías y publicaciones científicas verificadas (OMS, ADA, AHA/ACC, ACOG, KDIGO, ESPEN, ACR, EFSA, MedlinePlus…), organizadas por temas y con indicación del tipo de fuente.
-- Seguimiento de peso, pasos y agua, guardado en el navegador (`localStorage`), con gráfica de los últimos 30 registros.
-- Pestaña **Hábitos**: registro diario en minutos de lectura de libros, meditación, actividades artísticas y recreación, con gráfica comparativa (misma escala de minutos), resumen por día y totales del período visible. Incluye una nota educativa sobre ocio y pantallas (OMS, CIE-11, AASM) sin lenguaje estigmatizante.
+- Seguimiento de peso, pasos y agua, guardado en el navegador (`localStorage`), con **fecha editable** (hoy por defecto y sin fechas futuras) y gráfica interactiva de 7, 30 o 90 registros con tooltip, crosshair y resumen del período.
+- Pestaña **Hábitos**: registro diario en minutos de lectura de libros, meditación, actividades artísticas y recreación, con la misma fecha editable, botones con color propio por categoría y gráfica comparativa (misma escala de minutos) con selector de período, tooltip y totales visibles. Incluye una nota educativa sobre ocio y pantallas (OMS, CIE-11, AASM) sin lenguaje estigmatizante.
 - Fondo ambient con paleta azul / rojo / amarillo / verde, estrella animada y controles de intensidad, blur y spread.
+- Footer visual inspirado en estética **ASCII / pixel crush**, con textura, estrellas pixeladas y tipografía mono, sin recursos externos.
 - Funcionamiento online (GitHub Pages) y offline (archivo único).
 
 ## Condiciones disponibles
@@ -58,6 +59,7 @@ Puedes marcar estas situaciones para ver bloques educativos específicos (no son
 - No existe servidor de datos, cuentas, cookies, analítica ni telemetría.
 - El seguimiento de peso, pasos y agua se guarda únicamente en el `localStorage` del navegador (`pesoAppV2`, con migración desde `pesoAppV1`).
 - Los hábitos (lectura, meditación, arte y recreación) se guardan en el **mismo registro diario** de `pesoAppV2`, como campos adicionales por día. Es un cambio aditivo: no requiere migración y conserva intactos los registros previos de peso, pasos y agua.
+- La fecha elegida en cada pestaña es solo de la sesión: al recargar, ambas vuelven a hoy. Los registros se guardan en la fecha que elijas.
 - Las casillas de condiciones no se guardan entre sesiones.
 - Nada de lo que registres se envía a ningún servidor.
 

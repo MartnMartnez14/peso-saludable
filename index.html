@@ -7,6 +7,7 @@
 <title>Pesos saludables y estilos de vida · Calculadora, consejos y seguimiento</title>
 <style>
 @property --angle { syntax:'<angle>'; initial-value:0deg; inherits:false; }
+:root{color-scheme:dark}
 *{box-sizing:border-box}body{margin:0;font-family:system-ui,Segoe UI,Roboto,Arial;background:#0b0e17;color:#e8ecf4;min-height:100vh;overflow-x:hidden}
 .ambient{position:fixed;inset:-20vmax;z-index:-2;filter:blur(var(--blur,56px));opacity:var(--int,0.65);transition:opacity .5s}
 .blob{position:absolute;width:55vmax;height:55vmax;border-radius:50%;filter:blur(40px);opacity:.8;mix-blend-mode:screen}
@@ -31,6 +32,14 @@ label{font-size:.85rem;color:#aab4c7}input,select{width:100%;padding:10px;border
 button{background:linear-gradient(90deg,#4285F4,#34A853);border:0;color:#fff;padding:11px 16px;border-radius:12px;font-weight:700;cursor:pointer}
 button.btn-pasos{background:linear-gradient(90deg,#FBBC05,#EA4335)}
 button.btn-agua{background:linear-gradient(90deg,#4285F4,#9b72cb)}
+.btn-hab{transition:filter .2s ease,transform .15s ease,box-shadow .25s ease}
+.btn-hab:hover{filter:brightness(1.08)}
+.btn-hab:active{transform:translateY(1px)}
+.btn-hab:focus-visible{outline:2px solid var(--hab-focus,#8ab4ff);outline-offset:2px}
+.btn-hab-lec{--hab-focus:#8ab4ff;background:linear-gradient(135deg,#4285F4,#6d4aff);box-shadow:0 8px 20px -12px rgba(66,133,244,.95)}
+.btn-hab-med{--hab-focus:#5ff09a;background:linear-gradient(135deg,#34A853,#2dd4bf);box-shadow:0 8px 20px -12px rgba(52,168,83,.95)}
+.btn-hab-art{--hab-focus:#ffd54d;background:linear-gradient(135deg,#FBBC05,#ff9d5c);color:#1a1400;box-shadow:0 8px 20px -12px rgba(251,188,5,.95)}
+.btn-hab-rec{--hab-focus:#ff9d9d;background:linear-gradient(135deg,#EA4335,#e879a9);box-shadow:0 8px 20px -12px rgba(234,67,53,.95)}
 .btn-think{background:linear-gradient(120deg,#6d4aff,#9b72cb 50%,#c06cff);background-size:180% 180%;background-position:0% 50%;box-shadow:0 6px 18px -6px rgba(155,114,203,.75);transition:background-position .45s ease,box-shadow .3s ease,transform .15s ease}
 .btn-think:hover{background-position:100% 50%;box-shadow:0 8px 24px -6px rgba(192,108,255,.85)}
 .btn-think:active{transform:translateY(1px)}
@@ -46,8 +55,30 @@ button.btn-agua{background:linear-gradient(90deg,#4285F4,#9b72cb)}
 .bar{height:10px;background:#222a45;border-radius:99px;overflow:hidden}.bar>i{display:block;height:100%;background:conic-gradient(from 0deg,#4285F4,#EA4335,#FBBC05,#34A853);transition:width .6s}
 small.mut{color:#8b96ad}ul{line-height:1.55;margin:.4em 0;padding-left:1.2em}li{margin:.25em 0}a{color:#8ab4ff}
 .ctrl{display:flex;gap:12px;flex-wrap:wrap;font-size:.85rem;color:#aab4c7}.ctrl input{width:130px;padding:0}
-canvas.chart{width:100%;height:220px;background:#0e1322;border:1px solid #2a3350;border-radius:12px;cursor:crosshair;touch-action:pan-y}.grid4 input,.grid4 button{min-height:44px}
-.tip-chart{position:absolute;pointer-events:none;background:#111624;border:1px solid #2a3350;border-radius:8px;padding:6px 10px;font-size:.8rem;display:none;z-index:2;white-space:nowrap}
+canvas.chart{display:block;width:100%;height:240px;background:transparent;border:0;border-radius:10px;cursor:crosshair;touch-action:pan-y}.grid4 input,.grid4 button{min-height:44px}
+.date-row{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap;margin:10px 0 12px}
+.date-field{flex:0 1 220px;min-width:170px}
+.date-field label{display:block;margin-bottom:4px}
+.date-row input[type=date]{min-height:44px;color-scheme:dark}
+.btn-hoy{background:#1c2440;border:1px solid #2a3350;color:#cdd6e6;padding:10px 14px;border-radius:10px;font-size:.8rem;font-weight:700;min-height:44px;box-shadow:none}
+.btn-hoy:hover{border-color:#8ab4ff;color:#fff;box-shadow:0 0 12px -4px rgba(138,180,255,.7)}
+.chart-card{position:relative;margin:12px 0 10px;padding:14px;border:1px solid #2a3350;border-radius:16px;background:linear-gradient(180deg,rgba(20,27,45,.96),rgba(11,16,30,.96));box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 24px 55px -40px #000;overflow:hidden}
+.chart-card::before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) .7px,transparent .8px);background-size:18px 18px;opacity:.16;pointer-events:none;mask-image:linear-gradient(180deg,#000,transparent 70%)}
+.chart-head{position:relative;display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.chart-title{margin:0;font-size:.98rem;font-weight:800;letter-spacing:.01em}
+.chart-sub{display:block;margin-top:2px;font-size:.72rem;font-weight:500;color:#8b96ad}
+.range-switch{display:flex;gap:3px;padding:3px;border:1px solid #2a3350;border-radius:10px;background:#0b1020}
+.range-btn{background:transparent;border:0;color:#8b96ad;padding:5px 9px;border-radius:7px;font-size:.7rem;font-weight:700;line-height:1;min-height:0;box-shadow:none}
+.range-btn:hover{color:#fff;background:#1c2440}
+.range-btn.on{background:#1c2440;color:#fff;box-shadow:inset 0 0 0 1px #3a4568}
+.legend{position:relative;display:flex;flex-wrap:wrap;gap:6px;margin:0 0 9px}
+.legend-chip{display:inline-flex;align-items:center;gap:5px;padding:3px 8px;border:1px solid #2a3350;border-radius:999px;background:#0e1322;color:#aab4c7;font-size:.67rem;font-weight:600}
+.legend-chip i{width:8px;height:8px;border-radius:99px;background:var(--c);box-shadow:0 0 8px var(--c)}
+.chart-body{position:relative;z-index:1}
+.chart-foot{position:relative;z-index:1;margin-top:8px}
+.chart-summary{color:#8b96ad;font-size:.78rem;line-height:1.55}
+.chart-summary b{color:#e8ecf4}
+.tip-chart{position:absolute;pointer-events:none;background:rgba(17,22,36,.98);border:1px solid #3a4568;border-radius:10px;padding:8px 10px;font-size:.76rem;line-height:1.45;display:none;z-index:3;white-space:nowrap;box-shadow:0 16px 34px -16px #000}
 .chart-wrap{position:relative}
 .checks{display:grid;gap:8px;grid-template-columns:1fr}
 @media(min-width:640px){.checks{grid-template-columns:1fr 1fr}}
@@ -76,11 +107,32 @@ details.ev[open] summary{margin-bottom:6px}
 .refs{margin:.3em 0;padding-left:1.1em}
 .refs li{margin:.5em 0;font-size:.92rem;line-height:1.5}
 .rtype{display:inline-block;font-size:.75rem;background:#1c2440;border:1px solid #2a3350;border-radius:999px;padding:1px 8px;margin-right:6px;color:#cdd6e6;white-space:nowrap}
-footer{color:#8b96ad;font-size:.8rem;margin-top:20px;line-height:1.6}
-footer p{margin:.4em 0}
+.site-footer{position:relative;margin:34px 0 0;border:1px solid #2a3350;border-radius:18px;overflow:hidden;background:#070a12;color:#aab4c7;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;isolation:isolate}
+.site-footer::before{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(circle at 12% 8%,rgba(66,133,244,.2),transparent 32%),radial-gradient(circle at 88% 18%,rgba(234,67,53,.15),transparent 30%),radial-gradient(circle at 58% 108%,rgba(52,168,83,.14),transparent 38%),repeating-linear-gradient(0deg,rgba(255,255,255,.032) 0 1px,transparent 1px 4px)}
+.site-footer::after{content:"";position:absolute;top:0;left:0;right:0;height:7px;z-index:2;background:repeating-linear-gradient(90deg,#4285F4 0 12px,#34A853 12px 24px,#FBBC05 24px 36px,#EA4335 36px 48px);opacity:.85;image-rendering:pixelated}
+.pixel-sky{position:absolute;inset:10px 0 0;z-index:0;pointer-events:none;opacity:.16;background-image:radial-gradient(#8ab4ff 1px,transparent 1.7px),radial-gradient(#fff 1px,transparent 1.7px);background-size:47px 43px,71px 67px;background-position:7px 13px,23px 5px;image-rendering:pixelated}
+.footer-inner{position:relative;z-index:1;padding:24px 18px 16px}
+.footer-top{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+@media(min-width:760px){.footer-top{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}}
+.footer-kicker{display:inline-flex;align-items:center;gap:7px;color:#8ab4ff;font-size:.68rem;letter-spacing:.16em;text-transform:uppercase}
+.footer-kicker::before{content:"";width:7px;height:7px;background:#34A853;box-shadow:0 0 10px rgba(52,168,83,.9)}
+.footer-title{margin:8px 0 6px;font-size:clamp(1.15rem,2.5vw,1.65rem);line-height:1.15;letter-spacing:.1em;text-transform:uppercase;color:#e8ecf4}
+.footer-sub{margin:0;color:#aab4c7;font-size:.76rem;line-height:1.6;max-width:34rem}
+.footer-chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+.footer-chip{border:1px solid #2a3350;background:#0b1020;padding:4px 8px;border-radius:6px;font-size:.64rem;color:#cdd6e6;white-space:nowrap}
+.footer-chip b{color:#5ff09a}
+.footer-links{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 0}
+.footer-links a{display:inline-block;padding:7px 10px;border:1px solid #2a3350;border-radius:6px;background:#0b1020;color:#cdd6e6;text-decoration:none;font-size:.68rem;font-weight:700;transition:border-color .2s,color .2s,box-shadow .2s}
+.footer-links a:hover{border-color:#8ab4ff;color:#fff;box-shadow:0 0 12px -5px #8ab4ff}
+.ascii-art{margin:0;color:#52627f;font-size:clamp(.4rem,.85vw,.58rem);line-height:1.05;letter-spacing:.13em;white-space:pre;overflow:hidden;user-select:none;text-shadow:0 0 8px rgba(66,133,244,.22)}
+.footer-legal{border-top:1px dashed #2a3350;margin-top:16px;padding-top:12px;font-size:.66rem;line-height:1.7;color:#8b96ad}
+.footer-legal p{margin:.35em 0}
+.footer-bottom{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;margin-top:12px;font-size:.64rem;color:#5f6f95}
+.pixel-cursor{display:inline-block;width:.55em;height:1em;background:#34A853;vertical-align:-.12em;box-shadow:0 0 10px rgba(52,168,83,.65);animation:blink 1.15s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
 :focus-visible{outline:2px solid #8ab4ff;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){
- .blob,.card::before,.gemini-star{animation:none!important}
+ .blob,.card::before,.gemini-star,.pixel-cursor{animation:none!important}
  *{transition-duration:.01ms!important}
 }
 </style>
@@ -257,30 +309,74 @@ footer p{margin:.4em 0}
 <section id="seg" class="card" hidden role="tabpanel" aria-labelledby="tab-seg" tabindex="0">
 <h2>Mi seguimiento</h2>
 <p class="note purple">Tus registros se guardan localmente en este navegador y no se envían a ningún servidor.</p>
-<div class="grid grid3">
-<div><label for="wHoy">Peso hoy (kg)</label><input id="wHoy" type="number" step="0.1" inputmode="decimal"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
-<div><label for="pHoy">Pasos hoy</label><input id="pHoy" type="number" min="0" inputmode="numeric"><button id="btnP" class="btn-pasos" style="margin-top:8px">Guardar registro</button></div>
-<div><label for="aHoy">Vasos de agua hoy</label><input id="aHoy" type="number" min="0" max="30" inputmode="numeric"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
+<div class="date-row">
+<div class="date-field"><label for="segDate">Fecha del registro</label><input id="segDate" type="date"></div>
+<button type="button" class="btn-hoy" id="segToday">Hoy</button>
 </div>
+<div class="grid grid3">
+<div><label for="wHoy">Peso (kg)</label><input id="wHoy" type="number" step="0.1" inputmode="decimal"><button id="btnW" style="margin-top:8px">Guardar registro</button></div>
+<div><label for="pHoy">Pasos</label><input id="pHoy" type="number" min="0" inputmode="numeric"><button id="btnP" class="btn-pasos" style="margin-top:8px">Guardar registro</button></div>
+<div><label for="aHoy">Vasos de agua</label><input id="aHoy" type="number" min="0" max="30" inputmode="numeric"><button id="btnA" class="btn-agua" style="margin-top:8px">Guardar registro</button></div>
+</div>
+<p id="segLive" class="mut" role="status" style="min-height:1.2em"></p>
 <p class="note">Pasos y agua se registran como hábito personal. <strong>10.000 pasos y 8 vasos son solo referencias visuales</strong>: los beneficios del movimiento empiezan con cantidades menores y las necesidades de líquidos varían según cuerpo, clima, actividad, alimentación y situación clínica.</p>
-<p class="chart-wrap"><canvas id="evol" class="chart" width="800" height="220" role="img" aria-label="Gráfica de evolución de peso, pasos y agua en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTip" class="tip-chart" aria-hidden="true"></span><br>
-<small class="mut">🟢 peso · 🟡 pasos · 🔵 vasos · un valor por día (si guardás de nuevo, se actualiza el de hoy). La línea discontinua marca la referencia visual actual (10.000 pasos / 8 vasos), no un requisito universal.</small></p>
-<div id="log"></div>
+<div class="chart-card">
+<div class="chart-head">
+<div><h3 class="chart-title">Evolución del seguimiento</h3><span class="chart-sub">Peso en kg · pasos y agua como % de referencia</span></div>
+<div class="range-switch" role="group" aria-label="Período de la gráfica de seguimiento">
+<button type="button" class="range-btn" data-chart="seg" data-range="7">7</button>
+<button type="button" class="range-btn on" data-chart="seg" data-range="30">30</button>
+<button type="button" class="range-btn" data-chart="seg" data-range="90">90</button>
+</div>
+</div>
+<div class="legend">
+<span class="legend-chip" style="--c:#34A853"><i></i>Peso</span>
+<span class="legend-chip" style="--c:#FBBC05"><i></i>Pasos</span>
+<span class="legend-chip" style="--c:#4285F4"><i></i>Agua</span>
+</div>
+<div class="chart-body"><canvas id="evol" class="chart" role="img" aria-label="Gráfica de evolución de peso, pasos y agua en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTip" class="tip-chart" aria-hidden="true"></span></div>
+<div class="chart-foot">
+<div id="log" class="chart-summary"></div>
+<small class="mut">Un valor por día: si guardás de nuevo la misma fecha, se actualiza. La línea discontinua marca la referencia visual (10.000 pasos / 8 vasos), no un requisito universal.</small>
+</div>
+</div>
 </section>
 
 <section id="habd" class="card" hidden role="tabpanel" aria-labelledby="tab-habd" tabindex="0">
 <h2>Hábitos</h2>
 <p class="note purple">Tus registros se guardan localmente en este navegador y no se envían a ningún servidor.</p>
+<div class="date-row">
+<div class="date-field"><label for="habDate">Fecha del registro</label><input id="habDate" type="date"></div>
+<button type="button" class="btn-hoy" id="habToday">Hoy</button>
+</div>
 <div class="grid grid4">
-<div><label for="habLec"><span aria-hidden="true">📚</span> Lectura de libros físicos (min)</label><input id="habLec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabLec" style="margin-top:8px" aria-label="Guardar registro de lectura de libros">Guardar registro</button></div>
-<div><label for="habMed"><span aria-hidden="true">🧘</span> Meditación (min)</label><input id="habMed" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabMed" style="margin-top:8px" aria-label="Guardar registro de meditación">Guardar registro</button></div>
-<div><label for="habArt"><span aria-hidden="true">🎨</span> Actividades artísticas (min)</label><input id="habArt" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabArt" style="margin-top:8px" aria-label="Guardar registro de actividades artísticas">Guardar registro</button></div>
-<div><label for="habRec"><span aria-hidden="true">🎮</span> Recreación (min)</label><input id="habRec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabRec" style="margin-top:8px" aria-label="Guardar registro de recreación">Guardar registro</button></div>
+<div><label for="habLec"><span aria-hidden="true">📚</span> Lectura de libros físicos (min)</label><input id="habLec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabLec" class="btn-hab btn-hab-lec" style="margin-top:8px" aria-label="Guardar registro de lectura de libros">Guardar registro</button></div>
+<div><label for="habMed"><span aria-hidden="true">🧘</span> Meditación (min)</label><input id="habMed" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabMed" class="btn-hab btn-hab-med" style="margin-top:8px" aria-label="Guardar registro de meditación">Guardar registro</button></div>
+<div><label for="habArt"><span aria-hidden="true">🎨</span> Actividades artísticas (min)</label><input id="habArt" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabArt" class="btn-hab btn-hab-art" style="margin-top:8px" aria-label="Guardar registro de actividades artísticas">Guardar registro</button></div>
+<div><label for="habRec"><span aria-hidden="true">🎮</span> Recreación (min)</label><input id="habRec" type="number" min="0" max="1440" step="1" inputmode="numeric"><button id="btnHabRec" class="btn-hab btn-hab-rec" style="margin-top:8px" aria-label="Guardar registro de recreación">Guardar registro</button></div>
 </div>
 <p class="note blue"><strong>Registrar no es una meta a maximizar.</strong> Anotar tus minutos es descriptivo. La OMS señala que el videojuego es un pasatiempo saludable para la mayoría; el "trastorno por videojuegos" (CIE-11) afecta a una minoría y se define por el deterioro funcional, no por la cantidad de horas. La OMS 2020 recomienda limitar el tiempo sedentario y sustituirlo por actividad de cualquier intensidad, y la AASM recuerda cuidar las pantallas antes de dormir. Si el ocio desplaza el sueño, el movimiento o la vida social, conviene revisarlo con un profesional.</p>
-<p class="chart-wrap"><canvas id="evolHab" class="chart" width="800" height="220" role="img" aria-label="Gráfica de evolución de minutos diarios por hábito en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTipHab" class="tip-chart" aria-hidden="true"></span><br>
-<small class="mut"><span aria-hidden="true">🔵</span> lectura · <span aria-hidden="true">🟢</span> meditación · <span aria-hidden="true">🟡</span> arte · <span aria-hidden="true">🔴</span> recreación · un valor por día (si guardás de nuevo, se actualiza el de hoy). Cada categoría usa además un marcador y un trazo distintos.</small></p>
-<div id="habLog"></div>
+<div class="chart-card">
+<div class="chart-head">
+<div><h3 class="chart-title">Minutos por hábito</h3><span class="chart-sub">Escala común en minutos · cada serie conserva su color y marcador</span></div>
+<div class="range-switch" role="group" aria-label="Período de la gráfica de hábitos">
+<button type="button" class="range-btn" data-chart="hab" data-range="7">7</button>
+<button type="button" class="range-btn on" data-chart="hab" data-range="30">30</button>
+<button type="button" class="range-btn" data-chart="hab" data-range="90">90</button>
+</div>
+</div>
+<div class="legend">
+<span class="legend-chip" style="--c:#4285F4"><i></i>Lectura</span>
+<span class="legend-chip" style="--c:#34A853"><i></i>Meditación</span>
+<span class="legend-chip" style="--c:#FBBC05"><i></i>Arte</span>
+<span class="legend-chip" style="--c:#EA4335"><i></i>Recreación</span>
+</div>
+<div class="chart-body"><canvas id="evolHab" class="chart" role="img" aria-label="Gráfica de evolución de minutos diarios por hábito en los últimos registros. El resumen textual que aparece debajo contiene los mismos datos."></canvas><span id="chartTipHab" class="tip-chart" aria-hidden="true"></span></div>
+<div class="chart-foot">
+<div id="habLog" class="chart-summary"></div>
+<small class="mut">Un valor por día: si guardás de nuevo la misma fecha, se actualiza. Cada categoría usa un color, un marcador y un trazo distintos.</small>
+</div>
+</div>
 <p id="habLive" class="mut" role="status" style="min-height:1.2em"></p>
 </section>
 
@@ -295,10 +391,43 @@ footer p{margin:.4em 0}
 <small class="mut">El enlace de Starlink es de afiliado; puede ofrecerte el primer mes según las condiciones vigentes de Starlink.</small>
 </section>
 
-<footer>
+<footer class="site-footer">
+<span class="pixel-sky" aria-hidden="true"></span>
+<div class="footer-inner">
+<div class="footer-top">
+<div>
+<div class="footer-kicker">salud · datos · hábitos</div>
+<h2 class="footer-title">Pesos saludables</h2>
+<p class="footer-sub">Una herramienta educativa para mirar tus datos con contexto, sin metas universales ni diagnósticos automáticos.</p>
+<div class="footer-chips">
+<span class="footer-chip"><b>●</b> 100 % local</span>
+<span class="footer-chip">18+</span>
+<span class="footer-chip">sin servidores</span>
+<span class="footer-chip">offline</span>
+</div>
+<div class="footer-links">
+<a href="https://ko-fi.com/martinmartinezgarcia" target="_blank" rel="noopener noreferrer">☕ Ko-fi</a>
+<a href="https://www.paypal.com/paypalme/blufferedtwitch" target="_blank" rel="noopener noreferrer">💙 PayPal</a>
+<a href="https://starlink.com/es?referral=RC-DF-5848974-78640-68&amp;app_source=share" target="_blank" rel="noopener noreferrer">🛰️ Starlink</a>
+</div>
+</div>
+<pre class="ascii-art" aria-hidden="true">        .        *        .        *        .
+    .  /#\   .   /##\  .  /#\   .   /##\  .
+      /###\     /####\   /###\     /####\
+      \###/     \####/   \###/     \####/
+    '  \#/   *   \##/  '  \#/   *   \##/  '
+        '        *        '        *        '</pre>
+</div>
+<div class="footer-legal">
 <p>Información educativa basada en las fuentes citadas. No realiza diagnósticos ni sustituye la valoración de profesionales de la salud.</p>
 <p>Herramienta para personas adultas (18+). No está adaptada para evaluar peso, IMC o crecimiento en niños y adolescentes.</p>
-<p>Los registros de seguimiento se guardan localmente en este navegador y no se envían a ningún servidor.</p>
+<p>Los registros de seguimiento y hábitos se guardan localmente en este navegador y no se envían a ningún servidor.</p>
+</div>
+<div class="footer-bottom">
+<span>PESO SALUDABLE · v2</span>
+<span>&gt; hecho con HTML, CSS y JS <span class="pixel-cursor" aria-hidden="true"></span></span>
+</div>
+</div>
 </footer>
 </div>
 <script>
@@ -315,7 +444,8 @@ function selectTab(t){
   x.tabIndex=on?0:-1;
    $(x.dataset.t).hidden=!on;
   });
- if(t.dataset.t==='habd'){loadHabInputs();requestAnimationFrame(drawHab);}
+ if(t.dataset.t==='seg'){syncDateLimits();loadSegInputs($('segDate').value);requestAnimationFrame(()=>draw());}
+ if(t.dataset.t==='habd'){syncDateLimits();loadHabInputs($('habDate').value);requestAnimationFrame(()=>drawHab());}
 }
 tabs.forEach((t,i)=>{
  t.addEventListener('click',()=>selectTab(t));
@@ -473,7 +603,16 @@ calc();
 
 // Tracking
 const META_P=10000,META_A=8,k='pesoAppV2',kOld='pesoAppV1';
+let segRange=30,habRange=30;
 function iso(off=0){const t=new Date();t.setHours(12,0,0,0);t.setDate(t.getDate()+off);return t.toISOString().slice(0,10);}
+function validISO(s){return /^\d{4}-\d{2}-\d{2}$/.test(s)&&!Number.isNaN(new Date(s+'T12:00:00').getTime());}
+function fmtDate(s){if(!validISO(s))return '—';const [y,m,d]=s.split('-');return d+'/'+m+'/'+y;}
+function fmtShort(s){if(!validISO(s))return '';const [y,m,d]=s.split('-');return d+'/'+m;}
+function entryFor(date){return d.hist.find(x=>x.date===date);}
+function syncDateLimits(){
+ const t=iso();
+ ['segDate','habDate'].forEach(id=>{const el=$(id);if(!el)return;el.max=t;if(!el.value||el.value>t)el.value=t;});
+}
 function migrate(raw){
  if(raw&&raw.hist) return raw;
  const map={};
@@ -489,52 +628,175 @@ function migrate(raw){
 }
 let d=migrate(JSON.parse(localStorage.getItem(k)||localStorage.getItem(kOld)||'{}'));
 function save(){localStorage.setItem(k,JSON.stringify(d));draw();drawHab();}
-function upsert(key,val){
- const t=iso();let e=d.hist.find(x=>x.date===t);
- if(!e){e={date:t};d.hist.push(e);d.hist.sort((a,b)=>a.date.localeCompare(b.date));}
- e[key]=val;save();
+function upsert(key,val,date=iso()){
+ if(!validISO(date)||date>iso())return false;
+ let e=entryFor(date);
+ if(!e){e={date};d.hist.push(e);d.hist.sort((a,b)=>a.date.localeCompare(b.date));}
+ e[key]=val;save();return true;
+}
+function rangeEntries(keys,range){return d.hist.filter(e=>keys.some(k=>e[k]!=null)).slice(-range);}
+function loadSegInputs(date=iso()){
+ const e=entryFor(date);
+ $('wHoy').value=e&&e.w!=null?e.w:'';
+ $('pHoy').value=e&&e.p!=null?e.p:'';
+ $('aHoy').value=e&&e.a!=null?e.a:'';
+}
+function segLive(msg){const el=$('segLive');if(el)el.textContent=msg;}
+function rgba(hex,a){
+ const h=hex.replace('#','');
+ const full=h.length===3?h.split('').map(c=>c+c).join(''):h;
+ const n=parseInt(full,16);
+ return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${a})`;
 }
 
-// Chart
-let hits=[];
-function draw(){
- const c=$('evol'),x=c.getContext('2d');x.clearRect(0,0,800,220);hits=[];
- const h=d.hist.filter(e=>e.w!=null||e.p!=null||e.a!=null).slice(-30);
- if(!h.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guardá un registro diario para ver la gráfica.',20,110);$('log').innerHTML='';return;}
+// Chart helpers
+function prepCanvas(cv,H=240){
+ const W=cv.clientWidth;if(!W)return null;
+ const dpr=window.devicePixelRatio||1;
+ cv.width=Math.round(W*dpr);cv.height=Math.round(H*dpr);cv.style.height=H+'px';
+ const ctx=cv.getContext('2d');if(!ctx)return null;
+ ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);
+ return {ctx,W,H};
+}
+function splitSegments(pts){
+ const out=[];let cur=[];
+ pts.forEach((p,i)=>{if(i&&p.i!==pts[i-1].i+1){if(cur.length)out.push(cur);cur=[];}cur.push(p);});
+ if(cur.length)out.push(cur);
+ return out;
+}
+function strokeSegments(ctx,pts,smooth=true){
+ splitSegments(pts).forEach(seg=>{
+  if(!seg.length)return;
+  ctx.beginPath();ctx.moveTo(seg[0].x,seg[0].y);
+  if(smooth&&seg.length>2){
+   for(let i=1;i<seg.length-1;i++){
+    const c=seg[i],n=seg[i+1];
+    ctx.quadraticCurveTo(c.x,c.y,(c.x+n.x)/2,(c.y+n.y)/2);
+   }
+   const last=seg[seg.length-1];ctx.lineTo(last.x,last.y);
+  }else{
+   seg.slice(1).forEach(p=>ctx.lineTo(p.x,p.y));
+  }
+  ctx.stroke();
+ });
+}
+function fillSegments(ctx,pts,baseY,color){
+ splitSegments(pts).forEach(seg=>{
+  if(seg.length<2)return;
+  const top=Math.min(...seg.map(p=>p.y));
+  const grad=ctx.createLinearGradient(0,top,0,baseY);
+  grad.addColorStop(0,rgba(color,.32));grad.addColorStop(1,rgba(color,0));
+  ctx.beginPath();ctx.moveTo(seg[0].x,baseY);
+  seg.forEach(p=>ctx.lineTo(p.x,p.y));
+  ctx.lineTo(seg[seg.length-1].x,baseY);ctx.closePath();
+  ctx.fillStyle=grad;ctx.fill();
+ });
+}
+function drawYAxis(ctx,W,H,L,R,T,B,ticks,leftFmt,rightFmt){
+ const pw=W-L-R,ph=H-T-B;
+ ctx.strokeStyle='#2a3350';ctx.fillStyle='#8b96ad';ctx.font='10px system-ui';ctx.lineWidth=1;
+ ticks.forEach(f=>{
+  const y=T+ph-f*ph;
+  ctx.setLineDash([3,4]);ctx.beginPath();ctx.moveTo(L,y);ctx.lineTo(L+pw,y);ctx.stroke();ctx.setLineDash([]);
+  ctx.fillText(leftFmt(f),4,y+3);
+  if(rightFmt)ctx.fillText(rightFmt(f),W-R+8,y+3);
+ });
+}
+function drawXLabels(ctx,L,pw,H,h){
+ ctx.fillStyle='#8b96ad';ctx.font='10px system-ui';
+ ctx.fillText(fmtShort(h[0].date),L,H-8);
+ if(h.length>1){const t=fmtShort(h[h.length-1].date);ctx.fillText(t,L+pw-ctx.measureText(t).width,H-8);}
+}
+function markerLine(ctx,date,h,xAt,T,ph){
+ const i=h.findIndex(e=>e.date===date);if(i<0)return;
+ const x=xAt(i);
+ ctx.save();ctx.strokeStyle='rgba(232,236,244,.28)';ctx.lineWidth=1;ctx.setLineDash([4,4]);
+ ctx.beginPath();ctx.moveTo(x,T);ctx.lineTo(x,T+ph);ctx.stroke();ctx.restore();
+}
+function emptyChart(ctx,W,H,msg){
+ ctx.fillStyle='#8b96ad';ctx.font='14px system-ui';
+ ctx.fillText(msg,24,H/2);
+}
+function nearestDateAt(cv,arr,clientX){
+ const r=cv.getBoundingClientRect(),x=clientX-r.left;
+ let best=null,bd=34;
+ arr.forEach(h=>{const dd=Math.abs(h.x-x);if(dd<bd){bd=dd;best=h;}});
+ return best?best.date:null;
+}
+function placeTip(cv,tip,group){
+ if(!group.length){tip.style.display='none';return;}
+ tip.style.display='block';
+ tip.innerHTML=`<b class="mut">${fmtDate(group[0].date)}</b>`+group.map(g=>`<br><b style="color:${g.col}">${g.label}</b> · ${g.val}`).join('');
+ const wrap=cv.parentElement;
+ let left=group[0].x+12;
+ if(left+tip.offsetWidth>wrap.clientWidth)left=group[0].x-tip.offsetWidth-12;
+ if(left<0)left=0;
+ const topY=Math.min(...group.map(g=>g.y));
+ let top=topY-12;if(top<0)top=topY+16;
+ tip.style.left=left+'px';tip.style.top=top+'px';
+}
+
+// Seguimiento
+let hits=[],segActive=null;
+function renderSegSummary(h,date){
+ const log=$('log');if(!log)return;
+ if(!h.length){log.innerHTML='<b>Sin registros todavía.</b> Guardá peso, pasos o agua para ver la gráfica.';return;}
+ const ent=entryFor(date);
+ const sel=ent?`peso ${ent.w??'—'} kg · pasos ${ent.p??'—'} · agua ${ent.a??'—'} vasos`:'sin registro en esta fecha';
  const ws=h.map(e=>e.w).filter(v=>v!=null);
- const mn=ws.length?Math.min(...ws)-2:0,mx=ws.length?Math.max(...ws)+2:1;
- const px=i=>28+i/(Math.max(1,h.length-1))*750;
- const pyKg=v=>190-(v-mn)/(mx-mn||1)*160;
- const pyPct=v=>190-Math.min(1.2,v)*160/1.2;
- x.strokeStyle='#2a3350';x.lineWidth=1;x.setLineDash([4,4]);x.beginPath();x.moveTo(20,pyPct(1));x.lineTo(790,pyPct(1));x.stroke();x.setLineDash([]);
- x.fillStyle='#8b96ad';x.font='10px system-ui';x.fillText('100% referencia pasos/agua',32,pyPct(1)-4);
- function line(key,col,yOf,label,fmt){
-  const pts=h.map((e,i)=>e[key]==null?null:{i,e,y:yOf(e[key])}).filter(Boolean);
-  x.strokeStyle=col;x.lineWidth=2.5;x.beginPath();
-  pts.forEach((p,n)=>{if(n){const prev=pts[n-1];if(prev.i===p.i-1){x.lineTo(px(p.i),p.y);}else{x.moveTo(px(p.i),p.y);}}else x.moveTo(px(p.i),p.y);});
-  x.stroke();
-  pts.forEach(p=>{
-   x.fillStyle=col;x.shadowColor=col;x.shadowBlur=8;x.beginPath();x.arc(px(p.i),p.y,5,0,7);x.fill();x.shadowBlur=0;
-   hits.push({x:px(p.i),y:p.y,label,val:fmt(p.e[key]),date:p.e.date,col});
+ const ps=h.map(e=>e.p).filter(v=>v!=null);
+ const as=h.map(e=>e.a).filter(v=>v!=null);
+ const avg=a=>a.reduce((s,v)=>s+v,0)/a.length;
+ const parts=[];
+ if(ws.length)parts.push(`peso ${Math.min(...ws).toFixed(1)}–${Math.max(...ws).toFixed(1)} kg`);
+ if(ps.length)parts.push(`pasos prom. ${Math.round(avg(ps)).toLocaleString('es')}`);
+ if(as.length)parts.push(`agua prom. ${avg(as).toFixed(1)} vasos`);
+ log.innerHTML=`<b>${fmtDate(date)}</b> · ${sel}<br>Período visible (${h.length} registro${h.length===1?'':'s'}): ${parts.join(' · ')||'—'}`;
+}
+function draw(activeDate=segActive){
+ segActive=activeDate;
+ const cv=$('evol');if(!cv)return;
+ const date=$('segDate')&&$('segDate').value?$('segDate').value:iso();
+ const h=rangeEntries(['w','p','a'],segRange);
+ hits=[];
+ renderSegSummary(h,date);
+ const p=prepCanvas(cv,240);if(!p)return;
+ const {ctx,W,H}=p;
+ if(!h.length){emptyChart(ctx,W,H,'Guardá un registro para ver la gráfica.');return;}
+ const L=48,R=56,T=18,B=30,pw=W-L-R,ph=H-T-B;
+ const ws=h.map(e=>e.w).filter(v=>v!=null);
+ let mn=ws.length?Math.min(...ws)-2:0,mx=ws.length?Math.max(...ws)+2:1;
+ if(mx-mn<1)mx=mn+1;
+ const xAt=i=>L+(h.length===1?pw/2:i/(h.length-1)*pw);
+ const pyKg=v=>T+ph-((v-mn)/(mx-mn||1))*ph;
+ const pyPct=v=>T+ph-(Math.min(1.2,Math.max(0,v))/1.2)*ph;
+ drawYAxis(ctx,W,H,L,R,T,B,[0,.5,1],f=>ws.length?`${(mn+f*(mx-mn)).toFixed(1)} kg`:'—',f=>`${Math.round(f*120)}%`);
+ const yRef=pyPct(1);
+ ctx.strokeStyle='rgba(251,188,5,.55)';ctx.lineWidth=1;ctx.setLineDash([5,5]);
+ ctx.beginPath();ctx.moveTo(L,yRef);ctx.lineTo(L+pw,yRef);ctx.stroke();ctx.setLineDash([]);
+ ctx.fillStyle='rgba(251,188,5,.9)';ctx.font='10px system-ui';ctx.fillText('100%',L+4,yRef-5);
+ markerLine(ctx,activeDate||date,h,xAt,T,ph);
+ function line(key,col,label,yOf,fmt,dash=[]){
+  const pts=h.map((e,i)=>e[key]==null?null:{i,date:e.date,y:yOf(e[key]),v:e[key]}).filter(Boolean);
+  if(!pts.length)return;
+  const xy=pts.map(q=>({i:q.i,x:xAt(q.i),y:q.y}));
+  if(key==='w')fillSegments(ctx,xy,T+ph,col);
+  ctx.strokeStyle=col;ctx.lineWidth=key==='w'?2.7:2;ctx.setLineDash(dash);
+  strokeSegments(ctx,xy,true);ctx.setLineDash([]);
+  pts.forEach(q=>{
+   const x=xAt(q.i),on=activeDate===q.date;
+   if(h.length<=45||on){
+    ctx.fillStyle=col;ctx.shadowColor=col;ctx.shadowBlur=on?12:7;
+    ctx.beginPath();ctx.arc(x,q.y,on?5:3.5,0,7);ctx.fill();ctx.shadowBlur=0;
+   }
+   hits.push({x,y:q.y,date:q.date,label,val:fmt(q.v),col});
   });
  }
- line('w','#34A853',pyKg,'Peso',v=>v+' kg');
- line('p','#FBBC05',v=>pyPct(v/META_P),'Pasos',v=>v.toLocaleString('es')+' / '+META_P.toLocaleString('es'));
- line('a','#4285F4',v=>pyPct(v/META_A),'Agua',v=>v+' / '+META_A+' vasos');
- const last=h[h.length-1];
- $('log').innerHTML=`<small class="mut">Último registro (${last.date}): peso ${last.w??'—'} kg · pasos ${last.p??'—'} · agua ${last.a??'—'} vasos · ${h.length} día(s)</small>`;
+ line('w','#34A853','Peso',pyKg,v=>v+' kg');
+ line('p','#FBBC05','Pasos',v=>pyPct(v/META_P),v=>v.toLocaleString('es')+' / '+META_P.toLocaleString('es'),[6,4]);
+ line('a','#4285F4','Agua',v=>pyPct(v/META_A),v=>v+' / '+META_A+' vasos',[2,4]);
+ drawXLabels(ctx,L,pw,H,h);
 }
-const tip=$('chartTip'),cv=$('evol');
-cv.onmousemove=ev=>{
- const r=cv.getBoundingClientRect(),sx=cv.width/r.width,sy=cv.height/r.height;
- const mx=(ev.clientX-r.left)*sx,my=(ev.clientY-r.top)*sy;
- let best=null,bd=14;
- hits.forEach(h=>{const dd=Math.hypot(h.x-mx,h.y-my);if(dd<bd){bd=dd;best=h;}});
- if(!best){tip.style.display='none';return;}
- tip.style.display='block';tip.style.left=(ev.clientX-r.left+10)+'px';tip.style.top=(ev.clientY-r.top-28)+'px';
- tip.style.borderColor=best.col;tip.innerHTML=`<b style="color:${best.col}">${best.label}</b> · ${best.val}<br><span class="mut">${best.date}</span>`;
-};
-cv.onmouseleave=()=>{tip.style.display='none';};
 
 // Hábitos: registro diario en minutos
 const HAB_MAX=1440;
@@ -544,10 +806,10 @@ const HAB=[
  {key:'art',input:'habArt',btn:'btnHabArt',col:'#FBBC05',label:'🎨 Arte',short:'actividades artísticas',mark:'t',dash:[2,3]},
  {key:'rec',input:'habRec',btn:'btnHabRec',col:'#EA4335',label:'🎮 Recreación',short:'recreación',mark:'d',dash:[10,3,2,3]}
 ];
-let habHits=[];
+let habHits=[],habActive=null;
 function habLive(msg){const el=$('habLive');if(el)el.textContent=msg;}
-function loadHabInputs(){
- const t=iso(),e=d.hist.find(x=>x.date===t);
+function loadHabInputs(date=iso()){
+ const e=entryFor(date);
  HAB.forEach(c=>{const el=$(c.input);if(el)el.value=(e&&e[c.key]!=null)?e[c.key]:'';});
 }
 function habMark(x,shape,cx,cy,col){
@@ -558,77 +820,145 @@ function habMark(x,shape,cx,cy,col){
  else{x.moveTo(cx,cy-4.5);x.lineTo(cx+4.5,cy);x.lineTo(cx,cy+4.5);x.lineTo(cx-4.5,cy);x.closePath();}
  x.fill();x.shadowBlur=0;
 }
-function drawHab(){
- const cvHab=$('evolHab');if(!cvHab)return;
- habHits=[];
- const h=d.hist.filter(e=>HAB.some(c=>e[c.key]!=null)).slice(-30);
- const log=$('habLog');
- if(!h.length){if(log)log.innerHTML='';}
- else{
-  const last=h[h.length-1];
-  const resumen=HAB.map(c=>`${c.label}: ${last[c.key]!=null?last[c.key]+' min':'—'}`).join(' · ');
-  const totales=HAB.map(c=>`${c.label}: ${h.reduce((s,e)=>s+(e[c.key]||0),0)} min`).join(' · ');
-  if(log)log.innerHTML=`<small class="mut">Último día (${last.date}): ${resumen}</small><br><small class="mut">Totales del período visible (${h.length} registro${h.length===1?'':'s'}): ${totales}</small>`;
- }
- const W=cvHab.clientWidth;if(!W)return;
- const H=220,dpr=window.devicePixelRatio||1;
- cvHab.width=Math.round(W*dpr);cvHab.height=Math.round(H*dpr);cvHab.style.height=H+'px';
- const x=cvHab.getContext('2d');x.setTransform(dpr,0,0,dpr,0,0);x.clearRect(0,0,W,H);
- if(!h.length){x.fillStyle='#8b96ad';x.font='14px system-ui';x.fillText('Guardá un registro diario para ver la gráfica.',16,110);return;}
- let mx=10;h.forEach(e=>HAB.forEach(c=>{if(e[c.key]!=null)mx=Math.max(mx,e[c.key]);}));
- const L=40,R=12,T=16,B=28,pw=W-L-R,ph=H-T-B;
- const px=i=>L+(h.length===1?pw/2:i/(h.length-1)*pw);
- const py=v=>T+ph-(v/mx)*ph;
- x.strokeStyle='#2a3350';x.fillStyle='#8b96ad';x.font='10px system-ui';
- [0,0.5,1].forEach(f=>{const y=py(mx*f);x.setLineDash([3,3]);x.beginPath();x.moveTo(L,y);x.lineTo(L+pw,y);x.stroke();x.setLineDash([]);x.fillText(Math.round(mx*f)+' min',2,y+3);});
- x.fillText(h[0].date,L,H-8);
- if(h.length>1){const t2=h[h.length-1].date;x.fillText(t2,L+pw-x.measureText(t2).width,H-8);}
- HAB.forEach(c=>{
-  const pts=h.map((e,i)=>e[c.key]==null?null:{i,e,v:e[c.key],y:py(e[c.key])}).filter(Boolean);
-  if(!pts.length)return;
-  x.strokeStyle=c.col;x.lineWidth=2.5;x.setLineDash(c.dash);x.beginPath();
-  pts.forEach((p,n)=>{if(n){const prev=pts[n-1];if(prev.i===p.i-1)x.lineTo(px(p.i),p.y);else x.moveTo(px(p.i),p.y);}else x.moveTo(px(p.i),p.y);});
-  x.stroke();x.setLineDash([]);
-  pts.forEach(p=>{habMark(x,c.mark,px(p.i),p.y,c.col);habHits.push({x:px(p.i),y:p.y,label:c.label,val:p.v+' min',date:p.e.date,col:c.col});});
- });
+function renderHabSummary(h,date){
+ const log=$('habLog');if(!log)return;
+ const ent=entryFor(date);
+ if(!h.length){log.innerHTML='<b>Sin registros todavía.</b> Guardá minutos de lectura, meditación, arte o recreación para ver la gráfica.';return;}
+ const sel=ent?HAB.map(c=>`${c.label}: ${ent[c.key]!=null?ent[c.key]+' min':'—'}`).join(' · '):'sin registro en esta fecha';
+ const totales=HAB.map(c=>`${c.label}: ${h.reduce((s,e)=>s+(e[c.key]||0),0)} min`).join(' · ');
+ log.innerHTML=`<b>${fmtDate(date)}</b> · ${sel}<br>Totales visibles (${h.length} registro${h.length===1?'':'s'}): ${totales}`;
 }
+function drawHab(activeDate=habActive){
+ habActive=activeDate;
+ const cvHab=$('evolHab');if(!cvHab)return;
+ const date=$('habDate')&&$('habDate').value?$('habDate').value:iso();
+ const h=rangeEntries(['lec','med','art','rec'],habRange);
+ habHits=[];
+ renderHabSummary(h,date);
+ const p=prepCanvas(cvHab,240);if(!p)return;
+ const {ctx,W,H}=p;
+ if(!h.length){emptyChart(ctx,W,H,'Guardá un registro para ver la gráfica.');return;}
+ let maxV=0;h.forEach(e=>HAB.forEach(c=>{if(e[c.key]!=null)maxV=Math.max(maxV,e[c.key]);}));
+ const mx=Math.max(10,Math.ceil(maxV/10)*10);
+ const L=48,R=16,T=18,B=30,pw=W-L-R,ph=H-T-B;
+ const xAt=i=>L+(h.length===1?pw/2:i/(h.length-1)*pw);
+ const py=v=>T+ph-(v/mx)*ph;
+ drawYAxis(ctx,W,H,L,R,T,B,[0,.5,1],f=>`${Math.round(mx*f)} min`,null);
+ markerLine(ctx,activeDate||date,h,xAt,T,ph);
+ HAB.forEach(c=>{
+  const pts=h.map((e,i)=>e[c.key]==null?null:{i,date:e.date,y:py(e[c.key]),v:e[c.key]}).filter(Boolean);
+  if(!pts.length)return;
+  const xy=pts.map(q=>({i:q.i,x:xAt(q.i),y:q.y}));
+  ctx.strokeStyle=c.col;ctx.lineWidth=2.4;ctx.setLineDash(c.dash);strokeSegments(ctx,xy,true);ctx.setLineDash([]);
+  pts.forEach(q=>{
+   const on=activeDate===q.date;
+   habMark(ctx,c.mark,xAt(q.i),q.y,c.col);
+   if(on){ctx.strokeStyle=c.col;ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(xAt(q.i),q.y,8,0,7);ctx.stroke();}
+   habHits.push({x:xAt(q.i),y:q.y,label:c.label,val:q.v+' min',date:q.date,col:c.col});
+  });
+ });
+ drawXLabels(ctx,L,pw,H,h);
+}
+
+// Interacción de gráficas
+const cvSeg=$('evol'),tipSeg=$('chartTip');
+if(cvSeg){
+ cvSeg.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  const date=nearestDateAt(cvSeg,hits,e.clientX);
+  if(date!==segActive){segActive=date;draw();}
+  placeTip(cvSeg,tipSeg,date?hits.filter(x=>x.date===date):[]);
+ });
+ cvSeg.addEventListener('pointerdown',e=>{
+  const date=nearestDateAt(cvSeg,hits,e.clientX);
+  segActive=date;draw();
+  placeTip(cvSeg,tipSeg,date?hits.filter(x=>x.date===date):[]);
+ });
+ cvSeg.addEventListener('pointerleave',()=>{segActive=null;draw();tipSeg.style.display='none';});
+}
+const cvHab=$('evolHab'),tipHab=$('chartTipHab');
+if(cvHab){
+ cvHab.addEventListener('pointermove',e=>{
+  if(e.pointerType==='touch')return;
+  const date=nearestDateAt(cvHab,habHits,e.clientX);
+  if(date!==habActive){habActive=date;drawHab();}
+  placeTip(cvHab,tipHab,date?habHits.filter(x=>x.date===date):[]);
+ });
+ cvHab.addEventListener('pointerdown',e=>{
+  const date=nearestDateAt(cvHab,habHits,e.clientX);
+  habActive=date;drawHab();
+  placeTip(cvHab,tipHab,date?habHits.filter(x=>x.date===date):[]);
+ });
+ cvHab.addEventListener('pointerleave',()=>{habActive=null;drawHab();tipHab.style.display='none';});
+}
+
+// Controles de fecha
+$('segDate').addEventListener('change',()=>{
+ syncDateLimits();segActive=null;segLive('');
+ loadSegInputs($('segDate').value);draw();
+});
+$('segToday').addEventListener('click',()=>{
+ $('segDate').value=iso();segActive=null;segLive('');
+ loadSegInputs($('segDate').value);draw();
+});
+$('habDate').addEventListener('change',()=>{
+ syncDateLimits();habActive=null;habLive('');
+ loadHabInputs($('habDate').value);drawHab();
+});
+$('habToday').addEventListener('click',()=>{
+ $('habDate').value=iso();habActive=null;habLive('');
+ loadHabInputs($('habDate').value);drawHab();
+});
+
+// Guardado de seguimiento
+function saveSeg(key,input,label,fmt,min,max){
+ const date=$('segDate').value||iso();
+ const raw=$(input).value;
+ if(raw===''){segLive('Ingresá un valor para '+label+'.');return;}
+ const n=Number(raw);
+ if(!Number.isFinite(n)||n<min||n>max){segLive('Valor inválido en '+label+'.');return;}
+ if(!upsert(key,n,date)){segLive('No se pudo guardar: revisá la fecha.');return;}
+ segLive('Guardado: '+label+' '+fmt(n)+' en '+fmtDate(date)+'.');
+}
+$('btnW').onclick=()=>saveSeg('w','wHoy','peso',v=>v+' kg',1,500);
+$('btnP').onclick=()=>saveSeg('p','pHoy','pasos',v=>v.toLocaleString('es'),0,10000000);
+$('btnA').onclick=()=>saveSeg('a','aHoy','agua',v=>v+' vasos',0,30);
+
+// Guardado de hábitos
 HAB.forEach(c=>{
  const b=$(c.btn);if(!b)return;
  b.addEventListener('click',()=>{
+  const date=$('habDate').value||iso();
   const raw=$(c.input).value;
   if(raw===''){habLive('Ingresá un valor para '+c.short+'.');return;}
   const n=Math.round(Number(raw));
   if(!Number.isFinite(n)||n<0||n>HAB_MAX){habLive('Valor inválido en '+c.short+' (0-'+HAB_MAX+' min).');return;}
-  upsert(c.key,n);
-  habLive('Guardado: '+c.short+' '+n+' min. Se actualizó el día de hoy.');
+  if(!upsert(c.key,n,date)){habLive('No se pudo guardar: revisá la fecha.');return;}
+  habLive('Guardado: '+c.short+' '+n+' min en '+fmtDate(date)+'.');
  });
 });
-const cvHab=$('evolHab'),tipHab=$('chartTipHab');
-function showHabTip(clientX,clientY){
- const r=cvHab.getBoundingClientRect();
- const mx=clientX-r.left,my=clientY-r.top;
- let best=null,bd=16;
- habHits.forEach(hh=>{const dd=Math.hypot(hh.x-mx,hh.y-my);if(dd<bd){bd=dd;best=hh;}});
- if(!best){tipHab.style.display='none';return;}
- const group=habHits.filter(hh=>hh.date===best.date);
- const wrap=cvHab.parentElement;
- tipHab.style.display='block';
- tipHab.style.borderColor=best.col;
- tipHab.innerHTML=`<b class="mut">${best.date}</b>`+group.map(g=>`<br><b style="color:${g.col}">${g.label}</b> · ${g.val}`).join('');
- const tw=tipHab.offsetWidth||120,ww=wrap.clientWidth;
- let left=mx+12;if(left+tw>ww)left=mx-tw-12;if(left<0)left=0;
- let top=my-40;if(top<0)top=my+16;
- tipHab.style.left=left+'px';tipHab.style.top=top+'px';
-}
-if(cvHab){
- cvHab.addEventListener('pointermove',e=>{if(e.pointerType==='touch')return;showHabTip(e.clientX,e.clientY);});
- cvHab.addEventListener('pointerdown',e=>{showHabTip(e.clientX,e.clientY);});
- cvHab.addEventListener('pointerleave',()=>{tipHab.style.display='none';});
-}
-window.addEventListener('resize',()=>{const s=$('habd');if(s&&!s.hidden)drawHab();});
-$('btnW').onclick=()=>{if($('wHoy').value) upsert('w',+$('wHoy').value);};
-$('btnP').onclick=()=>{if($('pHoy').value) upsert('p',+$('pHoy').value);};
-$('btnA').onclick=()=>{if($('aHoy').value!=='') upsert('a',+$('aHoy').value);};
+
+// Selector de período
+document.querySelectorAll('.range-btn').forEach(b=>{
+ b.setAttribute('aria-pressed',b.classList.contains('on')?'true':'false');
+ b.addEventListener('click',()=>{
+  const chart=b.dataset.chart,range=Number(b.dataset.range);
+  b.parentElement.querySelectorAll('.range-btn').forEach(x=>{
+   const on=x===b;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on?'true':'false');
+  });
+  if(chart==='seg'){segRange=range;segActive=null;draw();}
+  else{habRange=range;habActive=null;drawHab();}
+ });
+});
+
+window.addEventListener('resize',()=>{
+ if(!$('seg').hidden)draw();
+ if(!$('habd').hidden)drawHab();
+});
+
+syncDateLimits();
+loadSegInputs($('segDate').value);
+loadHabInputs($('habDate').value);
 draw();drawHab();
 </script>
 </body>
